@@ -1,0 +1,186 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/templateView.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisViewController.id}" />
+        <f:event listener="#{analysisViewController.load}" type="preRenderView" />
+    </f:metadata>
+
+    <ui:define name="content">
+
+        <h:form class="uk-container uk-container-center uk-margin-top">
+
+            <h:commandLink class="uk-button uk-button-module"  
+                           value="pdf" 
+                           action="#{analysisReportController.load(analysisViewController.instance.id)}" 
+                           style="float: right;" 
+                           target="_blank" />
+
+        </h:form>
+
+        <div class="uk-container uk-container-center" style="margin-top: 50px;">
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.summary}</div>
+                <div class="uk-width-8-10">#{analysisViewController.instance.summary}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.analysis_number}</div>
+                <div class="uk-width-8-10">#{analysisViewController.instance.number}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.typeOfAnalysis}</div>
+                <div class="uk-width-8-10">#{analysisViewController.instance.typeOfAnalysis}</div>
+            </div>
+
+            <ui:fragment rendered="#{analysisViewController.instance.analysisInfoWired()}">           
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.analysisInfo}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisViewController.instance.analysisInfo}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisViewController.instance.appearanceSampleWired()}">           
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.appearance}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisViewController.instance.appearanceSample}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisViewController.instance.preparationWired()}">           
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.preparation}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisViewController.instance.preparation}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisViewController.instance.calculationWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.calculation}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisViewController.instance.calculation}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.analysisStandard}</div>
+                <div class="uk-width-8-10">
+
+                    <p:dataTable id="standards"
+                                 var="standard" 
+                                 value="#{analysisViewController.instance.standards}"
+                                 emptyMessage="#{module.analysisStandard_list_empty}">  
+
+                        <p:column headerText="#{msg.name}">  
+                            <h:outputText value="#{standard.name}" />  
+                        </p:column>
+
+                        <p:column headerText="#{module.analysisStandardID}" style="text-align: center;" >  
+                            <h:outputText value="#{standard.analysisStandardID}" />  
+                        </p:column>
+
+                        <p:column headerText="#{module.minimumStandard}" style="text-align: center;" >  
+                            <h:outputText value="#{standard.minimumStandard} #{standard.unit}" />  
+                        </p:column>
+
+                        <p:column headerText="#{module.maximumStandard}" style="text-align: center;" >  
+                            <h:outputText value="#{standard.maximumStandard} #{standard.unit}" />  
+                        </p:column>
+
+                    </p:dataTable>
+
+                </div>
+            </div>
+
+            <ui:fragment rendered="#{analysisViewController.instance.isReferenceDataWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.reference}</div>
+                    <div class="uk-width-8-10">
+
+                        <h:form>
+                            <p:commandLink class="uk-button-button"  
+                                           value="#{msg.view}" 
+                                           action="#{analysisViewController.openReference()}"
+                                           ajax="false" immediate="false" target="_blank"/>
+                        </h:form>
+
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisViewController.instance.isDatasWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{msg.file_attachement}</div>
+                    <div class="uk-width-8-10">
+
+                        <h:form>
+
+                            <style type="text/css">
+                                .ui-datalist-data{padding-left: 0px!important;}
+                            </style>
+
+                            <p:dataList value="#{analysisViewController.instance.datas}" 
+                                        var="data">
+
+                                <div style="margin-bottom: 10px;">
+
+                                    <p:panelGrid columns="2" layout="grid" columnClasses="column1to2,column2to2">
+
+                                        <p:commandButton value="#{msg.download}" 
+                                                         ajax="false" 
+                                                         onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                                         icon="ui-icon-arrowthick-1-s"
+                                                         rendered="#{data.mime != 'pdf'}">
+                                            <p:fileDownload value="#{analysisViewController.fileDownload(data)}" />
+                                        </p:commandButton>
+
+                                        <p:commandLink class="uk-button-button"  
+                                                       value="#{msg.view}" 
+                                                       action="#{analysisViewController.openPDF(data)}"
+                                                       rendered="#{data.mime == 'pdf'}"
+                                                       ajax="false" immediate="false" target="_blank"/>
+
+                                        <h:outputText value="#{data.name} (#{data.mime})" style="margin-left: 20px;" class="uk-h5" />
+
+                                    </p:panelGrid>
+
+                                </div>
+
+                            </p:dataList>
+                        </h:form>
+
+                        <script type="text/javascript">
+                            function start() {
+                                PF('statusDialog').show();
+                            }
+
+                            function stop() {
+                                PF('statusDialog').hide();
+                            }
+                        </script>
+
+                    </div>
+                </div>
+            </ui:fragment>
+
+        </div>
+
+        <!--</ui:fragment>-->
+
+    </ui:define>
+
+</ui:composition>

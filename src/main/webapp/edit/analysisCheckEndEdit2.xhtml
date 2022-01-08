@@ -1,0 +1,160 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisCheckEndEditController.id}" />
+        <f:viewParam name="idAnylsisCheckEnd" value="#{analysisCheckEndEditController.idAnalysisCheckEnd}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 180px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="inactiveNumber"/>
+            <h:outputText value="2" class="numberContent activeNumber mainBackground"/>           
+            <h:outputText value="3" class="inactiveNumber"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisCheckEndEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <p:panel id="panelForm" style="margin-top: 20px; margin-bottom: 20px;">
+
+                    <div class="uk-grid" style="margin-bottom: 20px;">
+                        <div class="uk-width-1-1">
+                            <h:outputLabel value="#{module.analysis}: " />
+                        </div>
+                    </div>
+
+                    <script type="text/javascript">
+                        function handleDrop(event, ui) {
+                            var dropped = ui.draggable;
+
+                            dropped.fadeOut('fast');
+                        }
+                    </script>
+
+                    <p:dataGrid id="availableAnalysis"
+                                var="analysis" 
+                                value="#{analysisCheckEndEditController.analysisListAvailable}"  
+                                layout="grid"
+                                columns="3"
+                                emptyMessage="#{module.analysisAvailable_list_empty}"> 
+
+                        <p:panel id="pnl" header="#{analysis.number}" style="text-align:center">
+                            <h:outputText value="#{analysis.typeOfAnalysis}" class="uk-h5" />
+                            <br/>
+                            <h:outputText value="#{analysis.summary}" class="uk-h5" />
+                        </p:panel>
+
+                        <p:draggable for="pnl" revert="true" handle=".ui-panel-titlebar" stack=".ui-panel"/>
+                    </p:dataGrid>
+
+                    <p:fieldset id="dropArea" style="margin-top:20px;">
+                        <p:outputPanel>
+                            <div style="text-align: center; padding-top: 50px; padding-bottom: 50px; border: 1px solid #dddddd;">
+                                <h:outputText value="#{module.analysisForFlow_drop_here}"
+                                              class="uk-h3" />
+                            </div>
+                        </p:outputPanel>
+                    </p:fieldset>
+
+                    <p:droppable for="dropArea" 
+                                 tolerance="touch" 
+                                 activeStyleClass="ui-state-highlight" 
+                                 datasource="availableAnalysis" 
+                                 onDrop="handleDrop">
+                        <p:ajax listener="#{analysisCheckEndEditController.onDrop}" 
+                                update="panelForm" />
+                    </p:droppable>
+
+                    <p:dataTable id="selectedTable" 
+                                 var="analysisSelected" 
+                                 value="#{analysisCheckEndEditController.analysisListSelected}" 
+                                 rendered="#{not empty analysisCheckEndEditController.analysisListSelected}"
+                                 draggableRows="true"
+                                 style="margin-top: 20px;">
+
+                        <p:column headerText="#{module.analysis}"
+                                  style="text-align:center;">
+                            <h:outputText value="#{module[analysisSelected.typeOfAnalysis]}" />
+                        </p:column>
+
+                        <p:column headerText="#{module.analysis_number}"
+                                  style="text-align:center;">
+                            <h:outputText value="#{analysisSelected.number}" />
+                        </p:column>
+
+                        <p:column headerText="#{module.summary}">
+                            <h:outputText value="#{analysisSelected.summary}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.action}"
+                                  style="text-align:center; max-width: 100px;">  
+                            <p:commandLink value="#{msg.delete}"
+                                           class="mainColor"
+                                           process="@this"
+                                           actionListener="#{analysisCheckEndEditController.deleteAnalysis(analysisSelected)}"
+                                           update=":form" /> 
+                        </p:column>
+
+                    </p:dataTable>
+
+                </p:panel>
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:button value="#{msg.back}" outcome="/edit/analysisCheckEndEdit" class="uk-button" style="margin-top: 20px">   
+                    <f:param name="cid" value="#{analysisCheckEndEditController.conversation.id}"/>
+                </h:button>
+
+                <h:commandButton value="#{msg.save}" 
+                                 action="#{analysisCheckEndEditController.save}" 
+                                 class="uk-button uk-button-success" 
+                                 style="margin-top: 20px; float: right;" 
+                                 rendered="#{analysisCheckEndEditController.managed}" />
+                
+                <h:commandButton value="#{msg.next}" 
+                                 action="#{analysisCheckEndEditController.submitPage2}" 
+                                 class="uk-button uk-width-1-1" 
+                                 style="margin-top: 20px; margin-bottom: 20px;" />
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisCheckEndEditController.delete}" 
+                                 class="uk-button uk-button-danger" />
+                
+                <h:commandButton value="#{msg.cancel}" 
+                                 action="#{analysisCheckEndEditController.cancel}" 
+                                 immediate="true" 
+                                 class="uk-button" 
+                                 style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:head>
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <h:outputStylesheet name="css/reset.css"/>
+        <h:outputStylesheet name="css/style.css"/>
+        <h:outputStylesheet name="css/view.css"/>
+        <h:outputStylesheet name="css/primefaces-galaxy.css"/>
+        <h:outputStylesheet name="css/module.css"/>
+
+        <link rel="Galaxy icon" type="image/x-icon" href="/resources/img/favicon.ico"/>
+
+    </h:head>
+
+    <h:body>
+
+        <div class="wrapper"> 
+
+            <div class="header">
+                <div class="uk-container uk-container-center">
+
+                    <div style="text-align: left; margin-top: 15px;">
+                        <h:graphicImage value="resources/img/headerLogo.png" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="messages">
+                <ui:include src="messages.xhtml" />
+            </div>
+
+            <div class="content">
+
+                <ui:insert name="content" />
+
+            </div>
+
+            <div class="footer">
+                <ui:include src="footer.xhtml" />
+            </div>
+
+        </div>
+
+        <ui:debug hotkey="q"/>
+
+    </h:body>
+
+</html>

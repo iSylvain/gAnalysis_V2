@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisFlowEditController.id}" />
+        <f:viewParam name="idAnalysisFlow" value="#{analysisFlowEditController.idAnalysisFlow}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 120px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="inactiveNumber"/>
+            <h:outputText value="2" class="numberContent activeNumber mainBackground"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisFlowEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <div style="text-align: center; margin-top: 20px; margin-bottom: 10px;">
+                    <h:outputText value="#{module.analysisForFlow_editArea_msg}"
+                                  class="uk-h5" />
+                    <span class="required">*</span>
+                </div>
+
+                <p:dataTable id="selectedAnalysisFlowTable" 
+                             var="analysisForFlow" 
+                             value="#{analysisFlowEditController.analysisForFlowListSelected}" 
+                             rendered="#{analysisFlowEditController.analysisForFlowListSelectedNoEmpty()}"                            
+                             rowKey="#{analysisForFlow}"
+                             style="margin-left: 10px; margin-right: 10px;">
+
+                    <p:column headerText="#{module.processStepNumber}"
+                              style="text-align:center; max-width: 260px;">
+                        <p:inputText placeholder="#{module.processStepNumber}" 
+                                     id="processStepNumber" 
+                                     value="#{analysisForFlow.processStepNumber}"/>
+                    </p:column>
+
+                    <p:column headerText="#{module.analysis}"
+                              style="text-align:center;">
+                        <h:outputText value="#{module[analysisForFlow.analysis.typeOfAnalysis]}" />
+                    </p:column>
+
+                    <p:column headerText="#{module.analysis_number}"
+                              style="text-align:center;">
+                        <h:outputText value="#{analysisForFlow.analysis.number}" />
+                    </p:column>
+
+                    <p:column headerText="#{module.summary}">
+                        <h:outputText value="#{analysisForFlow.analysis.summary}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg.action}"
+                              style="text-align:center; max-width: 100px;">  
+                        <p:commandLink value="#{msg.delete}"
+                                       class="mainColor"
+                                       process="@this"
+                                       actionListener="#{analysisFlowEditController.deleteAnalysisForFlow(analysisForFlow)}"
+                                       update=":form" /> 
+                    </p:column>
+
+                </p:dataTable>
+
+                <div style="margin-top: 10px;"><span class="required">*</span>#{msg.required}</div>
+
+                <h:button value="#{msg.back}" outcome="/edit/analysisFlowEdit2" class="uk-button" style="margin-top: 20px;">   
+                    <f:param name="cid" value="#{analysisFlowEditController.conversation.id}"/>
+                </h:button> 
+
+                <h:commandButton value="#{msg.save}" 
+                                 action="#{analysisFlowEditController.save}" 
+                                 class="uk-button uk-button-success uk-width-1-1" 
+                                 style="margin-top: 20px;" />
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisFlowEditController.delete}" 
+                                 class="uk-button uk-button-danger" />
+
+                <h:commandButton value="#{msg.cancel}" 
+                                 action="#{analysisFlowEditController.cancel}" 
+                                 immediate="true" 
+                                 class="uk-button" 
+                                 style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,166 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisFlowEditController.id}" />
+        <f:viewParam name="idAnalysisFlow" value="#{analysisFlowEditController.idAnalysisFlow}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 120px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="inactiveNumber"/>
+            <h:outputText value="2" class="numberContent activeNumber mainBackground"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisFlowEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <p:panel id="panelForm" style="margin-top: 20px; margin-bottom: 20px;">
+
+                    <div class="uk-grid" style="margin-bottom: 20px;">
+                        <div class="uk-width-1-1">
+                            <h:outputLabel value="#{module.analysisFlow}: " />
+                            <span class="required">*</span>
+                        </div>
+                    </div>
+
+                    <script type="text/javascript">
+                        function handleDrop(event, ui) {
+                            var dropped = ui.draggable;
+                            dropped.fadeOut('fast');
+                        }
+                    </script>
+
+                    <p:dataGrid id="availableAnalysisFlow"
+                                var="analysis" 
+                                value="#{analysisFlowEditController.analysisForFlowListAvailable}"  
+                                layout="grid"
+                                columns="3"
+                                emptyMessage="#{module.analysis_list_empty}"> 
+
+                        <p:panel id="pnl" header="#{analysis.analysis.number}" style="text-align:center">
+                            <h:outputText value="#{analysis.analysis.typeOfAnalysis}" class="uk-h5" />
+                            <br/>
+                            <h:outputText value="#{analysis.analysis.summary}" class="uk-h5" />
+                        </p:panel>
+
+                        <p:draggable for="pnl" revert="true" handle=".ui-panel-titlebar" stack=".ui-panel"/>
+                    </p:dataGrid>
+
+                    <p:fieldset id="dropArea" style="margin-top:20px;">
+                        <p:outputPanel>
+                            <div style="text-align: center; padding-top: 50px; padding-bottom: 50px; border: 1px solid #dddddd;">
+                                <h:outputText value="#{module.analysisForFlow_drop_here}"
+                                              class="uk-h3" />
+                            </div>
+                        </p:outputPanel>
+                    </p:fieldset>
+
+                    <p:droppable for="dropArea" 
+                                 tolerance="touch" 
+                                 activeStyleClass="ui-state-highlight" 
+                                 datasource="availableAnalysisFlow" 
+                                 onDrop="handleDrop">
+                        <p:ajax listener="#{analysisFlowEditController.onDrop}" 
+                                update=":form" />
+                    </p:droppable>
+
+                    <div style="text-align: center; margin-top: 20px; margin-bottom: 10px;">
+                        <h:outputText value="#{module.analysisForFlow_selectedArea_msg}"
+                                      class="uk-h5" />
+                    </div>
+
+                    <p:dataTable id="selectedAnalysisFlowTable" 
+                                 var="analysisForFlow" 
+                                 value="#{analysisFlowEditController.analysisForFlowListSelected}" 
+                                 rendered="#{analysisFlowEditController.analysisForFlowListSelectedNoEmpty()}"
+                                 draggableRows="true"
+                                 style="margin-left: 10px; margin-right: 10px;">
+
+                        <p:ajax event="rowReorder" listener="#{analysisFlowEditController.onRowReorder}" process="@this" immediate="true" />
+
+                        <p:column headerText="#{module.processStepNumber}"
+                                  style="text-align:center;">
+                            <h:outputText value="#{analysisForFlow.processStepNumber}" />
+                        </p:column>
+
+                        <p:column headerText="#{module.analysis}"
+                                  style="text-align:center;">
+                            <h:outputText value="#{module[analysisForFlow.analysis.typeOfAnalysis]}" />
+                        </p:column>
+
+                        <p:column headerText="#{module.analysis_number}"
+                                  style="text-align:center;">
+                            <h:outputText value="#{analysisForFlow.analysis.number}" />
+                        </p:column>
+
+                        <p:column headerText="#{module.summary}">
+                            <h:outputText value="#{analysisForFlow.analysis.summary}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.action}"
+                                  style="text-align:center; max-width: 100px;">  
+                            <p:commandLink value="#{msg.delete}"
+                                           class="mainColor"
+                                           process="@this"
+                                           actionListener="#{analysisFlowEditController.deleteAnalysisForFlow(analysisForFlow)}"
+                                           update=":form" /> 
+                        </p:column>
+
+                    </p:dataTable>
+
+                </p:panel>
+
+                <div style="margin-top: 10px;"><span class="required">*</span>#{msg.required}</div>
+
+                <h:button value="#{msg.back}" outcome="/edit/analysisFlowEdit" class="uk-button" style="margin-top: 20px;">   
+                    <f:param name="cid" value="#{analysisFlowEditController.conversation.id}"/>
+                </h:button> 
+
+                <h:commandButton value="#{msg.next}" action="#{analysisFlowEditController.submitPage2}" 
+                                 class="uk-button uk-width-1-1" 
+                                 style="margin-top: 20px;" />
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisFlowEditController.delete}" 
+                                 class="uk-button uk-button-danger" />
+
+                <h:commandButton value="#{msg.cancel}" 
+                                 action="#{analysisFlowEditController.cancel}" 
+                                 immediate="true" 
+                                 class="uk-button" 
+                                 style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

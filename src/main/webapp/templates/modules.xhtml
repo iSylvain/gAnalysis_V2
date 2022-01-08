@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <div class="uk-grid-divider" />
+
+    <div class="uk-container uk-container-center">
+
+        <h:form>
+
+            <h:commandLink value="gCore" 
+                           class="gCore_color uk-button"
+                           target="_blank" 
+                           action="#{productViewController.goToModule('gCore')}"
+                           style="margin-right: 25px;"
+                           rendered="true" />
+            <h:commandLink value="gSafety" 
+                           class="gSafety_color uk-button"
+                           target="_blank" 
+                           action="#{productViewController.goToModule('gSafety')}"
+                           style="margin-right: 25px;"
+                           rendered="#{productViewController.product.gSafety}" />
+            <h:commandLink value="gAnalysis" 
+                           class="gAnalysis_color uk-button"
+                           target="_blank" 
+                           action="#{productViewController.goToModule('gAnalysis')}"
+                           style="margin-right: 25px;"
+                           rendered="false" />
+            <h:commandLink value="gProducts" 
+                           class="gProducts_color uk-button"
+                           target="_blank" 
+                           action="#{productViewController.goToModule('gProducts')}"
+                           style="margin-right: 25px;"
+                           rendered="#{productViewController.product.gProducts}" />
+            <h:commandLink value="gFrog" 
+                           class="gFrog_color uk-button"
+                           target="_blank" 
+                           action="#{productViewController.goToModule('gFrog')}"
+                           style="margin-right: 25px;"
+                           rendered="#{productViewController.product.gFrog}" />
+            <h:commandLink value="gSynthesis" 
+                           class="gSynthesis_color uk-button"
+                           target="_blank" 
+                           action="#{productViewController.goToModule('gSynthesis')}"
+                           style="margin-right: 25px;"
+                           rendered="#{productViewController.product.gSynthesis}" />
+        </h:form>
+
+    </div>
+
+    <div class="uk-grid-divider" />
+
+</ui:composition>

@@ -1,0 +1,168 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/template.xhtml">
+
+    <ui:param name="search" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisCheckEndViewController.id}" />
+        <f:event listener="#{analysisCheckEndViewController.load}" type="preRenderView" />
+    </f:metadata>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center" style="margin-top: 50px;">
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{msg.name}</div>
+                <div class="uk-width-8-10">#{analysisCheckEndViewController.instance.product.name_en}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{msg.code}</div>
+                <div class="uk-width-8-10">#{analysisCheckEndViewController.instance.product.code}</div>
+            </div>
+
+            <ui:fragment rendered="#{analysisCheckEndViewController.instance.procedureListWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.procedureCode}</div>
+
+                    <div class="uk-width-8-10">
+                        <p:dataGrid id="procedure"
+                                    var="item" 
+                                    value="#{analysisCheckEndViewController.instance.procedureList}" 
+                                    columns="1" 
+                                    layout="grid"
+                                    paginator="false"
+                                    emptyMessage="#{module.procedure_list_empty}">
+
+                            <p:outputLabel value="#{item.procedureCode} - #{module.procedureVersion}: #{item.procedureVersion}" />
+
+                        </p:dataGrid>
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.phase}</div>
+                <div class="uk-width-8-10">#{analysisCheckEndViewController.instance.operation}</div>
+            </div>
+
+            <ui:fragment rendered="#{analysisCheckEndViewController.instance.informationWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{msg.info}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisCheckEndViewController.instance.information}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisCheckEndViewController.instance.productNameStartWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.productNameStart}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisCheckEndViewController.instance.productNameStart}" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisCheckEndViewController.instance.productCodeStartWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.productCodeStart}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisCheckEndViewController.instance.productCodeStart}" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{msg.localization}</div>
+                <div class="uk-width-8-10">#{msg[analysisCheckEndViewController.instance.location.label]}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.analysisCheckEndEnum}</div>
+                <div class="uk-width-8-10">#{module[analysisCheckEndViewController.instance.analysisCheckEndEnum.label]}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.checkSAP}</div>
+                <div class="uk-width-8-10">
+                    <h:graphicImage value="#{analysisCheckEndViewController.instance.checkSAP ? 'resources/img/approval.png' : 'resources/img/error.png'}" style="margin-right: 5px; vertical-align: middle" />
+                </div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.checkCO}</div>
+                <div class="uk-width-8-10">
+                    <h:graphicImage value="#{analysisCheckEndViewController.instance.checkCO ? 'resources/img/approval.png' : 'resources/img/error.png'}" style="margin-right: 5px; vertical-align: middle" />
+                </div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.checkAppearance}</div>
+                <div class="uk-width-8-10">
+                    <h:graphicImage value="#{analysisCheckEndViewController.instance.checkAppearance ? 'resources/img/approval.png' : 'resources/img/error.png'}" style="margin-right: 5px; vertical-align: middle" />
+                </div>
+            </div>
+
+            <ui:fragment rendered="#{analysisCheckEndViewController.instance.informationAnalysisWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.informationAnalysis}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisCheckEndViewController.instance.informationAnalysis}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisCheckEndViewController.instance.isAnalysisListWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.analysisList_size}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisCheckEndViewController.instance.analysisList.size()}" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <div style="margin-top: 20px;">
+
+                <p:dataGrid id="analysisList"
+                            var="item" 
+                            value="#{analysisCheckEndViewController.instance.analysisList}" 
+                            columns="1" 
+                            layout="grid"
+                            paginator="false">
+
+                    <div class="uk-panel uk-panel-box">
+
+                        <h3 class="uk-panel-title">
+                            #{item.number}
+
+                            <h:link class="uk-button uk-button-module uk-button-mini"
+                                    value="#{msg.view}" 
+                                    outcome="#{item.typeOfAnalysis == 'gc' ? 'analysisGCView' : 'analysisView'}"
+                                    target="_blank"
+                                    style="float: right; width: 100px; color: white!important;">
+                                <f:param name="id" value="#{item.id}" />
+                            </h:link>
+                        </h3>
+
+                        <h:outputText value="#{module.typeOfAnalysis} : #{module[item.typeOfAnalysis]}" />
+                        <br/>
+                        <h:outputText value="#{module.summary} : #{item.summary}" escape="false" />
+
+                    </div>
+
+                </p:dataGrid>
+
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

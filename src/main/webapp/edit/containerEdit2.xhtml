@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{containerEditController.id}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 120px; margin: auto; padding-top: 40px;"> 
+            <div class="inactiveNumber">1</div>
+            <div class="activeNumber mainBackground">
+                <h:outputText value="2" class="numberContent"/>
+            </div>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <h:form id="form">
+
+                <div style="margin-top: 20px;">
+
+                    <p:dataTable id="productTable"
+                                 value="#{containerEditController.lazyModel}" 
+                                 var="item"
+                                 lazy="true"
+                                 rows="30"
+                                 paginator="true" 
+                                 paginatorPosition="bottom"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                 selection="#{containerEditController.selectedProductList}"
+                                 rowKey="#{item.code}">
+
+                        <p:ajax event="rowSelectCheckbox" listener="#{containerEditController.itemsChanged('rowSelectCheckbox')}" />
+                        <p:ajax event="rowUnselectCheckbox" listener="#{containerEditController.itemsChanged('rowUnselectCheckbox')}" />
+                        <p:ajax event="rowSelect" listener="#{containerEditController.itemsChanged('rowSelect')}" />
+                        <p:ajax event="rowUnselect" listener="#{containerEditController.itemsChanged('rowUnselect')}" />
+                        <p:ajax event="toggleSelect" listener="#{containerEditController.itemsChanged('toggleSelect')}" />
+
+                        <p:column headerText="#{msg.product_name}" sortBy="#{item.name_en}" filterBy="#{item.name_en}">
+                            <h:outputText value="#{item.name_en}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.product_code}" sortBy="#{item.code}" filterBy="#{item.code}">
+                            <h:outputText value="#{item.code}" />
+                        </p:column>
+
+                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                    </p:dataTable>
+
+                </div>
+
+                <h:button value="#{msg.back}" outcome="/edit/containerEdit" class="uk-button" style="margin-top: 20px">   
+                    <f:param name="cid" value="#{containerEditController.conversation.id}"/>
+                </h:button>
+                
+                <h:commandButton value="#{msg.save}" action="#{containerEditController.save}" 
+                                 class="uk-button uk-button-success"
+                                 style="width: 100%; margin-top: 20px; margin-bottom: 20px; color: white;" />
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{containerEditController.delete}" 
+                                 class="uk-button uk-button-danger"
+                                 rendered="#{containerEditController.managed}" />
+                
+                <h:commandButton value="#{msg.cancel}" action="#{containerEditController.cancel}" immediate="true" class="uk-button" style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

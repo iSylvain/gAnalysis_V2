@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/template.xhtml">
+
+    <ui:param name="search" value="true"/>
+
+    <ui:define name="content">
+
+        <h:form class="uk-container uk-container-center uk-margin-top">
+
+            <h:link class="uk-button" value="#{msg.product_list}" outcome="productList" style="margin-right: 10px;" />
+            <h:link class="uk-button uk-button-success" value="Login" outcome="login" rendered="#{not identity.loggedIn}" />
+            <h:commandLink class="uk-button uk-button-danger" value="Logout" action="#{identity.logout}" rendered="#{identity.loggedIn}" />
+
+        </h:form>
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <p:dataGrid id="notifications"
+                        var="notification" 
+                        value="#{notificationController.notificationList}" 
+                        columns="1" 
+                        layout="grid"
+                        paginator="false"
+                        emptyMessage="#{msg.notificationList_empty}">
+
+                <h:form>
+                    <h:commandLink class="uk-panel uk-panel-box" 
+                                   action="#{notificationController.goToProduct(notification)}"
+                                   style="margin-top: 10px;">
+
+                        <div class="uk-badge uk-panel-badge #{notificationController.badgeType(notification.type)}">#{msg[notification.type]}</div>
+
+                        <h3 class="uk-panel-title">#{notification.messageInfo}</h3>
+
+                        <h:outputText value="#{notification.message}" escape="false" class="uk-h6" />
+                        <br/>
+                        <h:outputText value="#{notification.username}  " class="uk-comment-meta" />
+                        <h:outputText value="#{notification.createdOn}" class="uk-comment-meta" >
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+                        </h:outputText>
+
+                    </h:commandLink>
+                </h:form>
+                
+            </p:dataGrid>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

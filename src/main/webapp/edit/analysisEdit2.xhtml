@@ -1,0 +1,215 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisEditController.id}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 180px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="inactiveNumber"/>
+            <h:outputText value="2" class="numberContent activeNumber mainBackground"/>
+            <h:outputText value="3" class="inactiveNumber"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <p:panel id="panelForm">
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="name" value="#{msg.name}: ">
+                                <span class="required">*</span>
+                            </h:outputLabel>
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="name" 
+                                         value="#{analysisEditController.analysisStandard.name}" 
+                                         required="true"
+                                         autocomplete="false">
+                                <p:ajax update="msgName" event="blur" />
+                            </p:inputText>  
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message for="name" id="msgName" display="text"/>  
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="analysisStandardID" value="#{module.analysisStandardID}: " />
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="analysisStandardID" 
+                                         value="#{analysisEditController.analysisStandard.analysisStandardID}" 
+                                         required="false"
+                                         autocomplete="false">
+                                <p:ajax update="msgAnalysisStandardID" event="blur" />
+                            </p:inputText>  
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message for="analysisStandardID" id="msgAnalysisStandardID" display="text"/>   
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="unit" value="#{module.unit}: " />
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="unit" 
+                                         value="#{analysisEditController.analysisStandard.unit}" 
+                                         required="false"
+                                         autocomplete="false"
+                                         size="10">
+                                <p:ajax update="msgUnit" event="blur" />
+                            </p:inputText>  
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message for="unit" id="msgUnit" display="text"/> 
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="minimumStandard" value="#{module.minimumStandard}: " />
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="minimumStandard" 
+                                         value="#{analysisEditController.analysisStandard.minimumStandard}" 
+                                         required="false"
+                                         autocomplete="false"
+                                         size="10">
+                                <p:ajax update="minimumStandard" event="blur" />
+                            </p:inputText>  
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message for="minimumStandard" id="msgMinimumStandard" display="text"/>
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="maximumStandard" value="#{module.maximumStandard}: " />
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="maximumStandard" 
+                                         value="#{analysisEditController.analysisStandard.maximumStandard}" 
+                                         required="false"
+                                         autocomplete="false"
+                                         size="10">
+                                <p:ajax update="maximumStandard" event="blur" />
+                            </p:inputText>  
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message for="maximumStandard" id="msgMaximumStandard" display="text"/>  
+                        </div>
+                    </div>
+
+                    <p:commandButton id="add" 
+                                     class="uk-button"
+                                     style="margin-top: 10px;"
+                                     process="@this,panelForm"
+                                     value="#{msg.add}" 
+                                     actionListener="#{analysisEditController.addAnalysisStandard()}"
+                                     update=":form" />
+
+                    <div style="margin-top: 10px;"><span class="required">*</span>#{msg.required}</div> 
+
+                </p:panel>
+
+                <p:dataTable id="standards"
+                             styleClass="hide_headerTable"
+                             style="margin-top: 20px;"
+                             var="standard" 
+                             value="#{analysisEditController.instance.standards}"
+                             emptyMessage="#{module.analysisStandard_list_empty}">  
+
+                    <p:column headerText="#{msg.name}">  
+                        <h:outputText value="#{standard.name}" />  
+                    </p:column>
+
+                    <p:column headerText="#{module.analysisStandardID}" style="text-align: center;" >  
+                        <h:outputText value="#{standard.analysisStandardID}" />  
+                    </p:column>
+
+                    <p:column headerText="#{module.unit}" style="text-align: center;" >  
+                        <h:outputText value="#{standard.unit}" />  
+                    </p:column>
+
+                    <p:column headerText="#{module.minimumStandard}" style="text-align: center;" >  
+                        <h:outputText value="#{standard.minimumStandard}" />  
+                    </p:column>
+
+                    <p:column headerText="#{module.maximumStandard}" style="text-align: center;" >  
+                        <h:outputText value="#{standard.maximumStandard}" />  
+                    </p:column>
+
+                    <p:column headerText="#{msg.action}" style="text-align: center;">  
+                        <p:commandLink value="#{msg.delete}"
+                                       class="mainColor"
+                                       process="@this"
+                                       actionListener="#{analysisEditController.deleteAnalysisStandard(standard)}"
+                                       update="standards" /> 
+                    </p:column>
+
+                </p:dataTable>
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:button value="#{msg.back}" outcome="analysisEdit" class="uk-button" style="margin-top: 20px">   
+                    <f:param name="cid" value="#{analysisEditController.conversation.id}"/>
+                </h:button>
+
+                <h:commandButton value="#{msg.save}" 
+                                 action="#{analysisEditController.save}" 
+                                 class="uk-button uk-button-success" 
+                                 style="margin-top: 20px; float: right;" 
+                                 rendered="#{analysisGCEditController.managed}" />
+                
+                <h:commandButton value="#{msg.next}" 
+                                 action="#{analysisEditController.submitPage2}" 
+                                 class="uk-button uk-width-1-1" 
+                                 style="margin-top: 20px; margin-bottom: 20px;" />
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisEditController.delete}" 
+                                 class="uk-button uk-button-danger"
+                                 rendered="#{analysisEditController.analysisDeletable}" />
+                
+                <h:commandButton value="#{msg.cancel}" 
+                                 action="#{analysisEditController.cancel}" 
+                                 immediate="true" 
+                                 class="uk-button" 
+                                 style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,147 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisCheckEndEditController.id}" />
+        <f:viewParam name="idAnylsisCheckEnd" value="#{analysisCheckEndEditController.idAnalysisCheckEnd}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 180px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="inactiveNumber"/>
+            <h:outputText value="2" class="inactiveNumber"/>
+            <h:outputText value="3" class="numberContent activeNumber mainBackground"/>           
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisCheckEndEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <p:panel id="panelForm">
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="code" value="#{module.procedureCode}: ">
+                                <span class="required">*</span>
+                            </h:outputLabel>
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="code" 
+                                         value="#{analysisCheckEndEditController.procedure.procedureCode}" 
+                                         required="true" 
+                                         label="code" 
+                                         autocomplete="false">
+                                <p:ajax update="msgCode" event="blur" />
+                            </p:inputText>  
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message for="code" id="msgCode" display="text"/>  
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="version" value="#{module.procedureVersion}: ">
+                                <span class="required">*</span>
+                            </h:outputLabel>
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:spinner id="version" 
+                                       value="#{analysisCheckEndEditController.procedure.procedureVersion}"
+                                       required="true"
+                                       size="1"
+                                       converter="javax.faces.Integer">
+                                <p:ajax update="msgVersion" event="blur" />
+                            </p:spinner> 
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message for="version" id="msgVersion" display="text"/> 
+                        </div>
+                    </div>
+
+                    <p:commandButton id="add" 
+                                     class="uk-button"
+                                     style="margin-top: 10px;"
+                                     process="@this,panelForm"
+                                     value="#{msg.add}" 
+                                     actionListener="#{analysisCheckEndEditController.addProcedure()}"
+                                     update=":form" />
+
+                    <div style="margin-top: 10px;"><span class="required">*</span>#{msg.required}</div> 
+
+                </p:panel>
+
+                <p:dataTable id="procedureList" 
+                             style="margin-top: 20px;"
+                             var="item" 
+                             value="#{analysisCheckEndEditController.instance.procedureList}"
+                             emptyMessage="#{module.procedure_list_empty}">  
+
+                    <p:column headerText="#{module.procedureCode}" style="text-align: center;">  
+                        <h:outputText value="#{item.procedureCode}" />  
+                    </p:column>
+
+                    <p:column headerText="#{module.procedureVersion}" style="text-align: center;">  
+                        <h:outputText value="#{item.procedureVersion}" />  
+                    </p:column>
+
+                    <p:column headerText="#{msg.action}" style="text-align: center;">  
+                        <p:commandLink value="#{msg.delete}" 
+                                       id="remove"
+                                       class="mainColor"
+                                       process="@this,procedureList"
+                                       actionListener="#{analysisCheckEndEditController.deleteProcedure(item)}"
+                                       update=":form" /> 
+                    </p:column>
+
+                </p:dataTable>
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:button value="#{msg.back}" outcome="/edit/analysisCheckEndEdit2" class="uk-button">   
+                    <f:param name="cid" value="#{analysisCheckEndEditController.conversation.id}"/>
+                </h:button> 
+
+                <h:commandButton value="#{msg.save}" 
+                                 action="#{analysisCheckEndEditController.save}" 
+                                 class="uk-button uk-button-success uk-width-1-1" 
+                                 style="margin-top: 20px; margin-bottom: 20px;" />
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisCheckEndEditController.delete}" 
+                                 class="uk-button uk-button-danger" />
+
+                <h:commandButton value="#{msg.cancel}" 
+                                 action="#{analysisCheckEndEditController.cancel}" 
+                                 immediate="true" 
+                                 class="uk-button" 
+                                 style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

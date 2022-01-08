@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:define name="content">
+
+        <div>
+
+            <div class="uk-vertical-align uk-text-center uk-height-1-1">
+                <div class="uk-vertical-align-middle" style="width: 250px; padding-top: 50px;">
+
+                    <h:form id="form" 
+                            rendered="#{not identity.loggedIn}"
+                            class="uk-panel uk-panel-box uk-form">
+                        
+                        <p:focus context="form"/>
+                        <p:defaultCommand target="loginAction"/>
+                        
+                        <div class="uk-form-row">
+                            <p:inputText placeholder="username" id="name" value="#{loginCredentials.userId}" class="uk-width-1-1 uk-form-large" />
+                        </div>
+                        <div class="uk-form-row">
+                            <p:password placeholder="password" id="password" value="#{loginCredentials.password}" class="uk-width-1-1 uk-form-large" redisplay="true"/>
+                        </div>
+                        <div class="uk-form-row">
+                            <h:commandLink id="loginAction" class="uk-width-1-1 uk-button uk-button-success uk-button-large" value="Login" action="#{loginController.login}" />
+                        </div>
+
+                    </h:form>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

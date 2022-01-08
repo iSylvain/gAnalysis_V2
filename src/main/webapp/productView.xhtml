@@ -1,0 +1,811 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="search" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{productViewController.id}" />
+        <f:event listener="#{productViewController.load}" type="preRenderView" />
+    </f:metadata>
+
+    <ui:define name="content">
+
+        <ui:include src="templates/product.xhtml" />
+
+        <ui:include src="templates/modules.xhtml" />
+
+        <div class="contentStyle0">
+
+            <h:form class="uk-container uk-container-center">
+
+                <div style="margin-bottom: 15px;">
+                    <h:outputText value="#{module.analyzes}" class="uk-h3"/> 
+
+                    <h:link value="#{module.analysis_list}" 
+                            outcome="informationAnalysisView"
+                            style="float: right;"
+                            target="_blank">
+                        <f:param name="id" value="#{productViewController.product.id}" />
+                    </h:link>
+
+                </div>
+
+                <p:tabView id="tabViewAnalysis" orientation="top">
+
+                    <p:tab id="tab1" title="#{module.gc} (#{productViewController.gcList.size()})">
+
+                        <h:link value="#{msg.create}" 
+                                outcome="edit/analysisGCEdit"
+                                style="float: right; margin-bottom: 20px; margin-left: 10px;"
+                                rendered="#{authorizationChecker.hasEditorRole()}">
+                            <f:param name="id" value="#{productViewController.product.id}" />
+                        </h:link>  
+
+                        <h:link value="#{msg.create} dist" 
+                                outcome="edit/analysisGCEdit"
+                                style="float: right; margin-bottom: 20px; margin-left: 10px;"
+                                rendered="#{authorizationChecker.hasEditorRole()}">
+                            <f:param name="id" value="#{productViewController.product.id}" />
+                            <f:param name="forRectification" value="true" />
+                        </h:link>  
+
+                        <p:dataGrid var="analysis" 
+                                    value="#{productViewController.gcList}"  
+                                    layout="grid"
+                                    columns="3"
+                                    emptyMessage="#{module.analysis_list_empty}"> 
+
+                            <div class="uk-panel uk-panel-box #{analysis.cssUtil()}">
+
+                                <h3 class="uk-panel-title">
+                                    #{analysis.number}
+
+                                    <h:link class="uk-button uk-button-module uk-button-mini"
+                                            value="#{msg.view}" 
+                                            outcome="analysisGCView"
+                                            target="_blank"
+                                            style="float: right; width: 100px; color: white!important;">
+                                        <f:param name="id" value="#{analysis.id}" />
+                                    </h:link>
+                                </h3>
+
+                                <h:outputText value="#{analysis.product.name_en}" 
+                                              class="uk-h5"  />
+                                <br/>
+
+                                <h:outputText value="#{module.summary} : #{analysis.summary}" 
+                                              class="uk-h6"/>
+                                <br/>
+
+                                <h:outputText value="Type : #{module[analysis.analysisGCType.label]}" 
+                                              class="uk-h6"/>
+                                <br/>
+
+                                <h:commandLink class="uk-button uk-button-mini"  
+                                               value="pdf" 
+                                               action="#{analysisGCReportController.load(analysis.id)}" 
+                                               style="margin-top: 5px;"
+                                               target="_blank" />
+
+                                <p:commandLink class="uk-button uk-button-mini"  
+                                               value="#{module.reference}" 
+                                               action="#{productViewController.openReference(analysis)}"
+                                               rendered="#{analysis.isReferenceDataWired()}"
+                                               style="margin-top: 5px; margin-left: 5px; font-size: 11px!important;"
+                                               ajax="false" immediate="false" target="_blank"/>
+
+                                <h:link class="uk-button uk-button-mini"
+                                        value="#{msg.update}" 
+                                        outcome="edit/analysisGCEdit"
+                                        style="margin-top: 5px; margin-left: 5px; "
+                                        rendered="#{authorizationChecker.hasEditorRole()}">
+                                    <f:param name="idAnalysis" value="#{analysis.id}" />
+                                    <f:param name="id" value="#{productViewController.product.id}" />
+                                </h:link>
+
+                            </div>
+
+                        </p:dataGrid>
+                    </p:tab>
+
+                    <p:tab id="tab2" title="#{module.density} (#{productViewController.densityList.size()})">
+
+                        <h:link value="#{msg.create}" 
+                                outcome="edit/analysisEdit"
+                                style="float: right; margin-bottom: 20px; margin-left: 10px;"
+                                rendered="#{authorizationChecker.hasEditorRole()}">
+                            <f:param name="id" value="#{productViewController.product.id}" />
+                            <f:param name="analysisType" value="density" />
+                        </h:link>  
+
+                        <p:dataGrid var="analysis" 
+                                    value="#{productViewController.densityList}"  
+                                    layout="grid"
+                                    columns="3"
+                                    emptyMessage="#{module.analysis_list_empty}"> 
+
+                            <div class="uk-panel uk-panel-box">
+
+                                <h3 class="uk-panel-title">
+                                    #{analysis.number}
+
+                                    <h:link class="uk-button uk-button-module uk-button-mini"
+                                            value="#{msg.view}" 
+                                            outcome="analysisView"
+                                            target="_blank"
+                                            style="float: right; width: 100px; color: white!important;">
+                                        <f:param name="id" value="#{analysis.id}" />
+                                    </h:link>
+                                </h3>
+
+                                <h:outputText value="#{analysis.product.name_en}" 
+                                              class="uk-h6"/>
+                                <br/>
+
+                                <h:outputText value="#{analysis.summary}" class="uk-h6" />
+
+                                <br/>
+
+                                <h:commandLink class="uk-button uk-button-mini"  
+                                               value="pdf" 
+                                               action="#{analysisReportController.load(analysis.id)}" 
+                                               style="margin-top: 5px;"
+                                               target="_blank" />
+
+                                <h:link class="uk-button uk-button-mini"
+                                        value="#{msg.update}" 
+                                        outcome="edit/analysisEdit"
+                                        style="margin-top: 5px; margin-left: 5px; "
+                                        rendered="#{authorizationChecker.hasEditorRole()}">
+                                    <f:param name="idAnalysis" value="#{analysis.id}" />
+                                    <f:param name="id" value="#{productViewController.product.id}" />
+                                </h:link>
+
+                            </div>
+
+                        </p:dataGrid>
+                    </p:tab>
+
+                    <p:tab id="tab3" title="#{module.refraction} (#{productViewController.refractionList.size()})">
+
+                        <h:link value="#{msg.create}" 
+                                outcome="edit/analysisEdit"
+                                style="float: right; margin-bottom: 20px; margin-left: 10px;"
+                                rendered="#{authorizationChecker.hasEditorRole()}">
+                            <f:param name="id" value="#{productViewController.product.id}" />
+                            <f:param name="analysisType" value="refraction" />
+                        </h:link>  
+
+                        <p:dataGrid var="analysis" 
+                                    value="#{productViewController.refractionList}"  
+                                    layout="grid"
+                                    columns="3"
+                                    emptyMessage="#{module.analysis_list_empty}"> 
+
+                            <div class="uk-panel uk-panel-box">
+
+                                <h3 class="uk-panel-title">
+                                    #{analysis.number}
+
+                                    <h:link class="uk-button uk-button-module uk-button-mini"
+                                            value="#{msg.view}" 
+                                            outcome="analysisView"
+                                            target="_blank"
+                                            style="float: right; width: 100px; color: white!important;">
+                                        <f:param name="id" value="#{analysis.id}" />
+                                    </h:link>
+                                </h3>
+
+                                <h:outputText value="#{analysis.product.name_en}" 
+                                              class="uk-h6"/>
+                                <br/>
+
+                                <h:outputText value="#{analysis.summary}" class="uk-h6" />
+
+                                <br/>
+
+                                <h:commandLink class="uk-button uk-button-mini"  
+                                               value="pdf" 
+                                               action="#{analysisReportController.load(analysis.id)}" 
+                                               style="margin-top: 5px;"
+                                               target="_blank" />
+
+                                <h:link class="uk-button uk-button-mini"
+                                        value="#{msg.update}" 
+                                        outcome="edit/analysisEdit"
+                                        style="margin-top: 5px; margin-left: 5px; "
+                                        rendered="#{authorizationChecker.hasEditorRole()}">
+                                    <f:param name="idAnalysis" value="#{analysis.id}" />
+                                    <f:param name="id" value="#{productViewController.product.id}" />
+                                </h:link>
+
+                            </div>
+
+                        </p:dataGrid>
+                    </p:tab>
+
+                    <p:tab id="tab4" title="#{module.kf} (#{productViewController.kfList.size()})">
+
+                        <h:link value="#{msg.create}" 
+                                outcome="edit/analysisEdit"
+                                style="float: right; margin-bottom: 20px; margin-left: 10px;"
+                                rendered="#{authorizationChecker.hasEditorRole()}">
+                            <f:param name="id" value="#{productViewController.product.id}" />
+                            <f:param name="analysisType" value="kf" />
+                        </h:link>  
+
+                        <p:dataGrid var="analysis" 
+                                    value="#{productViewController.kfList}"  
+                                    layout="grid"
+                                    columns="3"
+                                    emptyMessage="#{module.analysis_list_empty}"> 
+
+                            <div class="uk-panel uk-panel-box">
+
+                                <h3 class="uk-panel-title">
+                                    #{analysis.number}
+
+                                    <h:link class="uk-button uk-button-module uk-button-mini"
+                                            value="#{msg.view}" 
+                                            outcome="analysisView"
+                                            target="_blank"
+                                            style="float: right; width: 100px; color: white!important;">
+                                        <f:param name="id" value="#{analysis.id}" />
+                                    </h:link>
+                                </h3>
+
+                                <h:outputText value="#{analysis.product.name_en}" 
+                                              class="uk-h6"/>
+                                <br/>
+
+                                <h:outputText value="#{analysis.summary}" class="uk-h6" />
+
+                                <br/>
+
+                                <h:commandLink class="uk-button uk-button-mini"  
+                                               value="pdf" 
+                                               action="#{analysisReportController.load(analysis.id)}" 
+                                               style="margin-top: 5px;"
+                                               target="_blank" />
+
+                                <h:link class="uk-button uk-button-mini"
+                                        value="#{msg.update}" 
+                                        outcome="edit/analysisEdit"
+                                        style="margin-top: 5px; margin-left: 5px; "
+                                        rendered="#{authorizationChecker.hasEditorRole()}">
+                                    <f:param name="idAnalysis" value="#{analysis.id}" />
+                                    <f:param name="id" value="#{productViewController.product.id}" />
+                                </h:link>
+
+                            </div>
+
+                        </p:dataGrid>
+                    </p:tab>
+
+                    <p:tab id="tab5" title="#{module.ph} (#{productViewController.phList.size()})">
+
+                        <h:link value="#{msg.create}" 
+                                outcome="edit/analysisEdit"
+                                style="float: right; margin-bottom: 20px; margin-left: 10px;"
+                                rendered="#{authorizationChecker.hasEditorRole()}">
+                            <f:param name="id" value="#{productViewController.product.id}" />
+                            <f:param name="analysisType" value="ph" />
+                        </h:link>  
+
+                        <p:dataGrid var="analysis" 
+                                    value="#{productViewController.phList}"  
+                                    layout="grid"
+                                    columns="3"
+                                    emptyMessage="#{module.analysis_list_empty}"> 
+
+                            <div class="uk-panel uk-panel-box">
+
+                                <h3 class="uk-panel-title">
+                                    #{analysis.number}
+
+                                    <h:link class="uk-button uk-button-module uk-button-mini"
+                                            value="#{msg.view}" 
+                                            outcome="analysisView"
+                                            target="_blank"
+                                            style="float: right; width: 100px; color: white!important;">
+                                        <f:param name="id" value="#{analysis.id}" />
+                                    </h:link>
+                                </h3>
+
+                                <h:outputText value="#{analysis.product.name_en}" 
+                                              class="uk-h6"/>
+                                <br/>
+
+                                <h:outputText value="#{analysis.summary}" class="uk-h6" />
+
+                                <br/>
+
+                                <h:commandLink class="uk-button uk-button-mini"  
+                                               value="pdf" 
+                                               action="#{analysisReportController.load(analysis.id)}" 
+                                               style="margin-top: 5px;"
+                                               target="_blank" />
+
+                                <h:link class="uk-button uk-button-mini"
+                                        value="#{msg.update}" 
+                                        outcome="edit/analysisEdit"
+                                        style="margin-top: 5px; margin-left: 5px;"
+                                        rendered="#{authorizationChecker.hasEditorRole()}">
+                                    <f:param name="idAnalysis" value="#{analysis.id}" />
+                                    <f:param name="id" value="#{productViewController.product.id}" />
+                                </h:link>
+
+                            </div>
+
+                        </p:dataGrid>
+                    </p:tab>
+
+                    <p:tab id="tab6" title="#{module.ir} (#{productViewController.irList.size()})">
+
+                        <h:link value="#{msg.create}" 
+                                outcome="edit/analysisEdit"
+                                style="float: right; margin-bottom: 20px; margin-left: 10px;"
+                                rendered="#{authorizationChecker.hasEditorRole()}">
+                            <f:param name="id" value="#{productViewController.product.id}" />
+                            <f:param name="analysisType" value="ir" />
+                        </h:link>  
+
+                        <p:dataGrid var="analysis" 
+                                    value="#{productViewController.irList}"  
+                                    layout="grid"
+                                    columns="3"
+                                    emptyMessage="#{module.analysis_list_empty}"> 
+
+                            <div class="uk-panel uk-panel-box">
+
+                                <h3 class="uk-panel-title">
+                                    #{analysis.number}
+
+                                    <h:link class="uk-button uk-button-module uk-button-mini"
+                                            value="#{msg.view}" 
+                                            outcome="analysisView"
+                                            target="_blank"
+                                            style="float: right; width: 100px; color: white!important;">
+                                        <f:param name="id" value="#{analysis.id}" />
+                                    </h:link>
+                                </h3>
+
+                                <h:outputText value="#{analysis.product.name_en}" 
+                                              class="uk-h6"/>
+                                <br/>
+
+                                <h:outputText value="#{analysis.summary}" class="uk-h6" />
+
+                                <br/>
+
+                                <h:commandLink class="uk-button uk-button-mini"  
+                                               value="pdf" 
+                                               action="#{analysisReportController.load(analysis.id)}" 
+                                               style="margin-top: 5px;"
+                                               target="_blank" />
+
+                                <h:link class="uk-button uk-button-mini"
+                                        value="#{msg.update}" 
+                                        outcome="edit/analysisEdit"
+                                        style="margin-top: 5px; margin-left: 5px;"
+                                        rendered="#{authorizationChecker.hasEditorRole()}">
+                                    <f:param name="idAnalysis" value="#{analysis.id}" />
+                                    <f:param name="id" value="#{productViewController.product.id}" />
+                                </h:link>
+
+                            </div>
+
+                        </p:dataGrid>
+                    </p:tab>
+
+                    <p:tab id="tab7" title="#{module.titration} (#{productViewController.titrationList.size()})">
+
+                        <h:link value="#{msg.create}" 
+                                outcome="edit/analysisEdit"
+                                style="float: right; margin-bottom: 20px; margin-left: 10px;"
+                                rendered="#{authorizationChecker.hasEditorRole()}">
+                            <f:param name="id" value="#{productViewController.product.id}" />
+                            <f:param name="analysisType" value="titration" />
+                        </h:link>  
+
+                        <p:dataGrid var="analysis" 
+                                    value="#{productViewController.titrationList}"  
+                                    layout="grid"
+                                    columns="3"
+                                    emptyMessage="#{module.analysis_list_empty}"> 
+
+                            <div class="uk-panel uk-panel-box">
+
+                                <h3 class="uk-panel-title">
+                                    #{analysis.number}
+
+                                    <h:link class="uk-button uk-button-module uk-button-mini"
+                                            value="#{msg.view}" 
+                                            outcome="analysisView"
+                                            target="_blank"
+                                            style="float: right; width: 100px; color: white!important;">
+                                        <f:param name="id" value="#{analysis.id}" />
+                                    </h:link>
+                                </h3>
+
+                                <h:outputText value="#{analysis.product.name_en}" 
+                                              class="uk-h6"/>
+                                <br/>
+
+                                <h:outputText value="#{analysis.summary}" class="uk-h6" />
+
+                                <br/>
+
+                                <h:commandLink class="uk-button uk-button-mini"  
+                                               value="pdf" 
+                                               action="#{analysisReportController.load(analysis.id)}" 
+                                               style="margin-top: 5px;"
+                                               target="_blank" />
+
+                                <h:link class="uk-button uk-button-mini"
+                                        value="#{msg.update}" 
+                                        outcome="edit/analysisEdit"
+                                        style="margin-top: 5px; margin-left: 5px;"
+                                        rendered="#{authorizationChecker.hasEditorRole()}">
+                                    <f:param name="idAnalysis" value="#{analysis.id}" />
+                                    <f:param name="id" value="#{productViewController.product.id}" />
+                                </h:link>
+
+                            </div>
+
+                        </p:dataGrid>
+                    </p:tab>
+
+                    <p:tab id="tab8" title="#{module.divers} (#{productViewController.diversList.size()})">
+
+                        <h:link value="#{msg.create}" 
+                                outcome="edit/analysisEdit"
+                                style="float: right; margin-bottom: 20px; margin-left: 10px;"
+                                rendered="#{authorizationChecker.hasEditorRole()}">
+                            <f:param name="id" value="#{productViewController.product.id}" />
+                            <f:param name="analysisType" value="divers" />
+                        </h:link>  
+
+                        <p:dataGrid var="analysis" 
+                                    value="#{productViewController.diversList}"  
+                                    layout="grid"
+                                    columns="3"
+                                    emptyMessage="#{module.analysis_list_empty}"> 
+
+                            <div class="uk-panel uk-panel-box">
+
+                                <h3 class="uk-panel-title">
+                                    #{analysis.number}
+
+                                    <h:link class="uk-button uk-button-module uk-button-mini"
+                                            value="#{msg.view}" 
+                                            outcome="analysisView"
+                                            target="_blank"
+                                            style="float: right; width: 100px; color: white!important;">
+                                        <f:param name="id" value="#{analysis.id}" />
+                                    </h:link>
+                                </h3>
+
+                                <h:outputText value="#{analysis.product.name_en}" 
+                                              class="uk-h6"/>
+                                <br/>
+
+                                <h:outputText value="#{analysis.summary}" class="uk-h6" />
+
+                                <br/>
+
+                                <h:commandLink class="uk-button uk-button-mini"  
+                                               value="pdf" 
+                                               action="#{analysisReportController.load(analysis.id)}" 
+                                               style="margin-top: 5px;"
+                                               target="_blank" />
+
+                                <h:link class="uk-button uk-button-mini"
+                                        value="#{msg.update}" 
+                                        outcome="edit/analysisEdit"
+                                        style="margin-top: 5px; margin-left: 5px;"
+                                        rendered="#{authorizationChecker.hasEditorRole()}">
+                                    <f:param name="idAnalysis" value="#{analysis.id}" />
+                                    <f:param name="id" value="#{productViewController.product.id}" />
+                                </h:link>
+
+                            </div>
+
+                        </p:dataGrid>
+                    </p:tab>
+
+                </p:tabView>
+
+            </h:form>
+
+        </div>
+
+        <div class="contentStyle1">
+
+            <div class="uk-container uk-container-center">
+
+                <div style="margin-bottom: 20px;">
+                    <h:outputText value="#{module.analysisFlow}" class="uk-h3"/> 
+
+                    <h:link value="#{msg.create}" 
+                            outcome="edit/analysisFlowEdit"
+                            style="float: right; margin-bottom: 20px;"
+                            rendered="#{authorizationChecker.hasEditorRole()}">
+                        <f:param name="id" value="#{productViewController.product.id}" />
+                    </h:link>  
+
+                </div>
+
+                <p:dataGrid var="flow" 
+                            value="#{productViewController.instance.analysisFlowList}"  
+                            layout="grid"
+                            columns="3"
+                            emptyMessage="#{module.analysisFlow_list_empty}"> 
+
+                    <div class="uk-panel uk-panel-box">
+
+                        <h3 class="uk-panel-title">
+                            #{flow.processCode}
+
+                            <h:link class="uk-button uk-button-module uk-button-mini"
+                                    value="#{msg.view}" 
+                                    outcome="analysisFlowView"
+                                    style="float: right; width: 100px; color: white!important;">
+                                <f:param name="id" value="#{flow.id}" />
+                            </h:link>
+                        </h3>
+                        <h:outputText value="#{module.procedureVersion} : #{flow.processVersion}"
+                                      class="uk-h6" />
+                        <br/>
+
+                        <ui:fragment rendered="#{flow.operationWired()}">
+                            <h:outputText value="#{module.operation} : #{flow.operation}"
+                                      class="uk-h6" />
+                            <br/>
+                        </ui:fragment>
+
+                        <h:outputText value="#{msg.info} : #{flow.information} &lt;br/&gt;"
+                                      escape="false"
+                                      class="uk-h6"
+                                      rendered="#{flow.informationWired()}" />
+
+                        <h:outputText value="#{module.analysis} : #{flow.analysisForFlowList.size()}" 
+                                      class="uk-h6" />
+                        <br/>
+                        <h:outputText value="#{module.locationDetail} : #{flow.locationDetail} (#{msg[flow.location.label]})" 
+                                      class="uk-h6" />
+                        <br/>
+
+                        <h:form>
+
+                            <h:commandLink class="uk-button uk-button-mini"  
+                                           value="pdf" 
+                                           action="#{analysisFlowReportController.load(flow.id)}" 
+                                           style="margin-top: 5px;"
+                                           target="_blank" />
+
+                            <h:link class="uk-button uk-button-mini"
+                                    value="#{msg.update}" 
+                                    outcome="edit/analysisFlowEdit"
+                                    style="margin-top: 5px; margin-left: 5px;"
+                                    rendered="#{authorizationChecker.hasEditorRole()}">
+                                <f:param name="idAnalysisFlow" value="#{flow.id}" />
+                                <f:param name="id" value="#{productViewController.product.id}" />
+                            </h:link>
+
+                        </h:form>
+
+                    </div>
+
+                </p:dataGrid>
+
+            </div>
+
+        </div>
+
+        <div class="contentStyle0">
+
+            <div class="uk-container uk-container-center">
+
+                <div style="margin-bottom: 20px;">
+                    <h:outputText value="#{module.analysisCheckEnd}" class="uk-h3"/> 
+
+                    <h:link value="#{msg.create}" 
+                            outcome="edit/analysisCheckEndEdit"
+                            style="float: right; margin-bottom: 20px;"
+                            rendered="#{authorizationChecker.hasEditorRole()}">
+                        <f:param name="id" value="#{productViewController.product.id}" />
+                    </h:link>  
+
+                </div>
+
+                <p:dataGrid var="checkEnd" 
+                            value="#{productViewController.instance.analysisCheckEndList}"  
+                            layout="grid"
+                            columns="3"
+                            emptyMessage="#{module.analysisCheckEnd_empty}"> 
+
+                    <div class="uk-panel uk-panel-box">
+
+                        <h3 class="uk-panel-title">
+                            OP #{checkEnd.operation}
+
+                            <h:link class="uk-button uk-button-module uk-button-mini"
+                                    value="#{msg.view}" 
+                                    outcome="analysisCheckEndView"
+                                    style="float: right; width: 100px; color: white!important;">
+                                <f:param name="id" value="#{checkEnd.id}" />
+                                <f:param name="idAnylsisCheck" value="#{productViewController.instance.id}" />
+                            </h:link>
+                        </h3>
+
+                        <h:outputText value="#{checkEnd.product.name_en} &lt;br/&gt;" 
+                                      escape="false"
+                                      class="uk-h5"  />
+
+                        <h:outputText value="#{module[checkEnd.analysisCheckEndEnum.label]} &lt;br/&gt;"
+                                      escape="false"
+                                      class="uk-h6" />
+
+                        <h:outputText value="#{msg.info} : #{checkEnd.information} &lt;br/&gt;"
+                                      escape="false"
+                                      class="uk-h6"
+                                      rendered="#{checkEnd.informationWired()}" />
+
+                        <h:outputText value="#{module.analysis} : #{checkEnd.analysisList.size()}" 
+                                      class="uk-h6" />
+
+                        <br/>
+
+                        <h:form>
+
+                            <h:link class="uk-button uk-button-mini"
+                                    value="#{msg.update}" 
+                                    outcome="edit/analysisCheckEndEdit"
+                                    style="margin-top: 5px;"
+                                    rendered="#{authorizationChecker.hasEditorRole()}">
+                                <f:param name="id" value="#{productViewController.product.id}" />
+                                <f:param name="idAnylsisCheckEnd" value="#{checkEnd.id}" />
+                            </h:link>
+
+                        </h:form>
+
+                    </div>
+
+                </p:dataGrid>
+            </div>
+        </div>
+
+        <div class="contentStyle1">
+
+            <div class="uk-container uk-container-center">
+
+                <div style="margin-bottom: 20px;">
+                    <h:outputText value="#{module.analysisCheck}" class="uk-h3"/> 
+
+                    <h:link value="#{msg.edit}" 
+                            outcome="edit/analysisCheckEdit"
+                            style="float: right; margin-bottom: 20px;"
+                            rendered="#{authorizationChecker.hasEditorRole()}">
+                        <f:param name="id" value="#{productViewController.product.id}" />
+                        <f:param name="idAnalysisCheck" value="#{productViewController.instance.id}" />
+                    </h:link>  
+
+                </div> 
+
+                <h:outputText value="#{module.analysisCheck_empty}" 
+                              rendered="#{!productViewController.instance.analysisCheckWired}"
+                              style="padding-left: 10px;"
+                              class="uk-h5"/>
+
+                <p:panelGrid columns="2"
+                             layout="grid"
+                             rendered="#{productViewController.instance.analysisCheckWired}"
+                             columnClasses="column1to2,column2to2"
+                             style="margin-bottom: 10px;">
+
+                    <h:outputText value="#{module.checkSAP} :" />
+                    <h:graphicImage value="#{productViewController.instance.analysisCheck.checkSAP ? 'resources/img/approval.png' : 'resources/img/error.png'}" style="margin-right: 5px; vertical-align: middle" />
+
+                    <h:outputText value="#{module.checkCO} :" />
+                    <h:graphicImage value="#{productViewController.instance.analysisCheck.checkCO ? 'resources/img/approval.png' : 'resources/img/error.png'}" style="margin-right: 5px; vertical-align: middle" />
+
+                    <h:outputText value="#{module.checkAppearance} :" />
+                    <h:graphicImage value="#{productViewController.instance.analysisCheck.checkAppearance ? 'resources/img/approval.png' : 'resources/img/error.png'}" style="margin-right: 5px; vertical-align: middle" />
+
+                    <h:outputText value="#{msg.info} :" rendered="#{productViewController.instance.analysisCheck.informationWired()}" />
+                    <h:outputText value="#{productViewController.instance.analysisCheck.information}" rendered="#{productViewController.instance.analysisCheck.informationWired()}" escape="false" />
+
+                </p:panelGrid>
+
+                <p:dataGrid var="analysis" 
+                            value="#{productViewController.instance.analysisCheck.analysisList}"  
+                            layout="grid"
+                            columns="3"
+                            emptyMessage=""> 
+
+                    <div class="uk-panel uk-panel-box">
+
+                        <h3 class="uk-panel-title"> #{analysis.number}</h3>
+                        <h:outputText value="#{module.typeOfAnalysis} : #{analysis.typeOfAnalysis}" class="uk-h6" />
+                        <br/>
+                        <h:outputText value="#{analysis.summary}" class="uk-h6"/>
+
+                    </div>
+
+                </p:dataGrid>
+
+            </div>
+        </div>
+
+        <div class="contentStyle0">
+
+            <h:form class="uk-container uk-container-center">
+
+                <div style="margin-bottom: 20px;">
+                    <h:outputText value="#{msg.file}" class="uk-h3"/> 
+
+                    <h:link value="#{msg.edit}" 
+                            outcome="edit/datasEdit"
+                            style="float: right; margin-bottom: 20px;"
+                            rendered="#{authorizationChecker.hasEditorRole()}">
+                        <f:param name="id" value="#{productViewController.product.id}" />
+                        <f:param name="idContainer" value="#{productViewController.instance.id}" />
+                    </h:link>  
+
+                </div>
+
+                <style type="text/css">
+                    .ui-datalist-data{padding-left: 0px!important;}
+                </style>
+
+                <p:dataList value="#{productViewController.instance.datas}" 
+                            var="data"
+                            emptyMessage="#{msg.file_empty}">
+
+                    <div style="margin-bottom: 10px;">
+
+                        <p:panelGrid columns="2" layout="grid" columnClasses="column1to2,column2to2">
+
+                            <p:commandButton value="#{msg.download}" 
+                                             ajax="false" 
+                                             onclick="PrimeFaces.monitorDownload(start, stop);"
+                                             rendered="#{data.mime != 'pdf'}">
+                                <p:fileDownload value="#{productViewController.fileDownload(data)}" />
+                            </p:commandButton>
+
+                            <p:commandLink class="uk-button-button"  
+                                           value="#{msg.view}" 
+                                           action="#{productViewController.openPDF(data)}"
+                                           rendered="#{data.mime == 'pdf'}"
+                                           ajax="false" immediate="false" target="_blank"/>
+
+                            <h:outputText value="#{data.name} (#{data.mime})" style="margin-left: 20px;" class="uk-h5" />
+
+                        </p:panelGrid>
+                    </div>
+
+                </p:dataList>
+
+                <script type="text/javascript">
+                    function start() {
+                        PF('statusDialog').show();
+                    }
+
+                    function stop() {
+                        PF('statusDialog').hide();
+                    }
+                </script>
+
+            </h:form>
+        </div>
+
+        <ui:include src="templates/container.xhtml" />
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <style type="text/css">
+        .column1to2{width: 25%;}
+        .column2to2{width: 75%;}
+        .column1to3{width: 30%;}
+        .column2to3{width: 20%;}
+        .column3to3{width: 50%;}
+    </style>
+
+    <div class="contentStyle3">
+
+        <div class="uk-container uk-container-center">
+
+            <div style="margin-bottom: 20px;">
+                <h:outputText value="#{msg.container} #{productViewController.instance.name_msg} (#{productViewController.instance.productList.size()})" class="uk-h3"/>
+            </div>
+
+            <ui:repeat var="p" value="#{productViewController.instance.productList}" varStatus="status">
+                <p:panelGrid columns="3" layout="grid" columnClasses="column1to3,column2to3,column3to3">
+
+                    <h:outputText value="#{p.name_msg}" class="uk-h5" />
+                    <h:outputText value="#{p.code}" class="uk-h5" />
+                    <p:commandLink value="#{msg.detail}" oncomplete="PF('dlgPdt').show();" class="uk-h5"
+                                   action="#{productViewController.selectProduct(p)}" update="productDialog" />
+
+                </p:panelGrid>
+            </ui:repeat>
+
+            <p:dialog id="productDialog"
+                      header="#{productViewController.selectedProduct.name_en}"
+                      widgetVar="dlgPdt" modal="true" showEffect="fade" hideEffect="fade" width="800" resizable="false" closeOnEscape="true" draggable="false">
+
+                <p:panelGrid columns="2" layout="grid" columnClasses="column1to2,column2to2">
+
+                    <h:outputText value="ID:" class="uk-h3" />
+                    <h:outputText value="#{p.id}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.product_name_en}:" class="uk-h3" />
+                    <h:outputText value="#{p.name_en}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.product_name_fr}:" rendered="#{p.name_frWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.name_fr}" rendered="#{p.name_frWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.product_name_es}:" rendered="#{p.name_esWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.name_es}" rendered="#{p.name_esWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.product_name_de}:" rendered="#{p.name_deWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.name_de}" rendered="#{p.name_deWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.cas}:" rendered="#{p.casWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.cas}" rendered="#{p.casWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.cas_name}:" rendered="#{p.casNameWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.casName}" rendered="#{p.casNameWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.einecs}:" rendered="#{p.einecsWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.einecs}" rendered="#{p.einecsWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.unNumber}:" rendered="#{p.unNumberWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.unNumber}" rendered="#{p.unNumberWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.onuNumber}:" rendered="#{p.onuNumberWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.onuNumber}" rendered="#{p.onuNumberWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.upac}:" rendered="#{p.upacNameWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.upacName}" rendered="#{p.upacNameWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.smile}:" rendered="#{p.smileWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.smile}" rendered="#{p.smileWired()}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.info}:" rendered="#{p.infoWired()}" class="uk-h3" />
+                    <h:outputText value="#{p.info}" rendered="#{p.infoWired()}" class="uk-h3" escape="false" />
+
+                    <h:outputText value="#{msg.product_materialType}:" class="uk-h3" />
+                    <h:outputText value="#{msg[p.materialType.label]}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.type}:" class="uk-h3" />
+                    <h:outputText value="#{msg[p.productType.label]}" class="uk-h3" />
+
+                    <h:outputText value="#{msg.fragrances_active}" class="uk-h3" />
+                    <h:graphicImage value="#{item.activeFragrances ? 'resources/img/approval.png' : 'resources/img/error.png'}" style="margin-right: 5px; vertical-align: middle" />
+
+                    <h:outputText value="#{msg.flavours_active}" class="uk-h3" />
+                    <h:graphicImage value="#{item.activeFlavours ? 'resources/img/approval.png' : 'resources/img/error.png'}" style="margin-right: 5px; vertical-align: middle" />
+
+                </p:panelGrid>
+
+            </p:dialog>
+
+        </div>
+
+    </div>
+
+</ui:composition>

@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/templateView.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{informationAnalysisViewController.id}" />
+        <f:event listener="#{informationAnalysisViewController.load()}" type="preRenderView" />
+    </f:metadata>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center" style="margin-top: 50px;">
+
+            <div style="margin-bottom: 20px;">
+                <h:outputText value="#{module.analysisList_size} : #{informationAnalysisViewController.informationAnalysisList.size()}"/>
+            </div>
+
+            <p:dataList value="#{informationAnalysisViewController.informationAnalysisList}" 
+                        var="informationAnalysis" 
+                        emptyMessage="#{module.informationAnalysisList_empty}">
+
+                <div class="uk-panel uk-panel-box" style="margin-bottom: 20px;">
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">#{module.number}</div>
+                        <div class="uk-width-8-10">#{informationAnalysis.number}</div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">#{module.typeOfAnalysis}</div>
+                        <div class="uk-width-8-10">#{informationAnalysis.typeOfAnalysis}</div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">#{module.summary}</div>
+                        <div class="uk-width-8-10">
+                            <h:outputText value="#{informationAnalysis.summary}" escape="false" />
+                        </div>
+                    </div>
+
+                    <ui:fragment rendered="#{informationAnalysis.analysisInfoWired()}">           
+                        <div class="uk-grid">
+                            <div class="uk-width-2-10">#{module.analysisInfo}</div>
+                            <div class="uk-width-8-10">#{informationAnalysis.analysisInfo}</div>
+                        </div>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{informationAnalysis.gcInfoWired()}">           
+                        <div class="uk-grid">
+                            <div class="uk-width-2-10">#{module.gcInfo}</div>
+                            <div class="uk-width-8-10">#{informationAnalysis.gcInfo}</div>
+                        </div>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{informationAnalysis.methodGCWired()}">           
+                        <div class="uk-grid">
+                            <div class="uk-width-2-10">#{module.methodGC}</div>
+                            <div class="uk-width-8-10">#{informationAnalysis.methodGC}</div>
+                        </div>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{informationAnalysis.programGCWired()}">           
+                        <div class="uk-grid">
+                            <div class="uk-width-2-10">#{module.programGC}</div>
+                            <div class="uk-width-8-10">#{informationAnalysis.programGC}</div>
+                        </div>
+                    </ui:fragment>
+
+                </div>
+
+            </p:dataList>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

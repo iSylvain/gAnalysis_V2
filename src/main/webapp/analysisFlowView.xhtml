@@ -1,0 +1,133 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/template.xhtml">
+
+    <ui:param name="search" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisFlowViewController.id}" />
+        <f:event listener="#{analysisFlowViewController.load}" type="preRenderView" />
+    </f:metadata>
+
+    <ui:define name="content">
+
+        <h:form class="uk-container uk-container-center uk-margin-top">
+
+            <h:commandLink class="uk-button uk-button-module"  
+                           value="pdf" 
+                           action="#{analysisFlowReportController.load(analysisFlowViewController.instance.id)}"
+                           style="float: right;" 
+                           target="_blank" />
+
+        </h:form>
+
+        <div class="uk-container uk-container-center" style="margin-top: 50px;">
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">ID</div>
+                <div class="uk-width-8-10">#{analysisFlowViewController.instance.id}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{msg.name}</div>
+                <div class="uk-width-8-10">#{analysisFlowViewController.instance.product.name_en}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{msg.code}</div>
+                <div class="uk-width-8-10">#{analysisFlowViewController.instance.product.code}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.procedureCode}</div>
+                <div class="uk-width-8-10">#{analysisFlowViewController.instance.processCode}</div>
+            </div>
+
+            <ui:fragment rendered="#{analysisFlowViewController.instance.operationWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.operation}</div>
+                    <div class="uk-width-8-10">#{analysisFlowViewController.instance.operation}</div>
+                </div>
+            </ui:fragment>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.procedureVersion}</div>
+                <div class="uk-width-8-10">#{analysisFlowViewController.instance.processVersion}</div>
+            </div>
+
+            <ui:fragment rendered="#{analysisFlowViewController.instance.informationWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{msg.info}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisFlowViewController.instance.information}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{msg.localization}</div>
+                <div class="uk-width-8-10">#{msg[analysisFlowViewController.instance.location.label]}</div>
+            </div>
+
+            <ui:fragment rendered="#{analysisFlowViewController.instance.locationDetailWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.locationDetail}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisFlowViewController.instance.locationDetail}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisFlowViewController.instance.isAnalysisForFlowListWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.analysisList_size}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisFlowViewController.instance.analysisForFlowList.size()}" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <div style="margin-top: 20px;">
+
+                <p:dataGrid id="analysisForFlowList"
+                            var="item" 
+                            value="#{analysisFlowViewController.instance.analysisForFlowList}" 
+                            columns="1" 
+                            layout="grid"
+                            paginator="false">
+
+                    <div class="uk-panel uk-panel-box">
+
+                        <h3 class="uk-panel-title">
+                            #{module.processStepNumber} N° #{item.processStepNumber}
+
+                            <h:link class="uk-button uk-button-module uk-button-mini"
+                                    value="#{msg.view}" 
+                                    outcome="#{item.analysis.typeOfAnalysis == 'gc' ? 'analysisGCView' : 'analysisView'}"
+                                    target="_blank"
+                                    style="float: right; width: 100px; color: white!important;">
+                                <f:param name="id" value="#{item.analysis.id}" />
+                            </h:link>
+                        </h3>
+
+                        <h:outputText value="#{module.number} : #{item.analysis.number}" />
+                        <br/>
+                        <h:outputText value="#{module.typeOfAnalysis} : #{module[item.analysis.typeOfAnalysis]}" />
+                        <br/>
+                        <h:outputText value="#{module.summary} : #{item.analysis.summary}" escape="false" />
+
+                    </div>
+
+                </p:dataGrid>
+
+            </div>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <header>
+
+        <ui:fragment rendered="#{empty edit ? false : true}">
+            <ui:insert name="editHeader" />
+        </ui:fragment>
+
+        <ui:fragment rendered="#{empty edit ? true : false}">
+
+            <div class="uk-container uk-container-center">
+
+                <div class="uk-grid" style="height: 120px;">
+                    
+                    <div class="uk-width-1-3" 
+                         style="text-align: justify; margin-top: 15px;">
+                        <h:link value="" outcome="home">
+                            <h:graphicImage value="/resources/img/headerLogo.png" />
+                        </h:link>
+                    </div>
+                    
+                    <div class="uk-width-1-3" style="margin-top: 65px;">
+                        <ui:fragment rendered="#{search eq false ? false : search}">
+                            <ui:include src="search.xhtml" />
+                        </ui:fragment>
+                    </div>
+                    
+                    <div class="uk-width-1-3"></div>
+                    
+                </div>
+
+            </div>
+
+        </ui:fragment>
+
+    </header>
+
+</ui:composition>

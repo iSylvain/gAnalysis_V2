@@ -1,0 +1,155 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisGCEditController.id}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 240px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="inactiveNumber"/>
+            <h:outputText value="2" class="inactiveNumber"/>
+            <h:outputText value="3" class="numberContent activeNumber mainBackground"/>
+            <h:outputText value="4" class="inactiveNumber"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisGCEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10 uk-form-horizontal">
+                        <h:outputLabel for="programGC" 
+                                       value="#{module.programGC}: ">
+                            <span class="required">*</span>
+                        </h:outputLabel>
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:selectOneMenu id="programGC" 
+                                         value="#{analysisGCEditController.instance.program}"
+                                         style="min-width: 200px;"
+                                         required="true"
+                                         converter="objectConverter">
+                            <f:selectItem itemLabel="#{msg.selectOne}" />
+                            <f:selectItems value="#{analysisGCEditController.programGCList}" var="program" itemLabel="#{program.name}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_programGC" for="programGC" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10 uk-form-horizontal">
+                        <h:outputLabel for="methodGC" 
+                                       value="#{module.methodGC}: ">
+                            <span class="required">*</span>
+                        </h:outputLabel>
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:selectOneMenu id="methodGC" 
+                                         value="#{analysisGCEditController.instance.method}"
+                                         style="min-width: 200px;"
+                                         required="true"
+                                         converter="objectConverter">
+                            <f:selectItem itemLabel="#{msg.selectOne}" />
+                            <f:selectItems value="#{analysisGCEditController.methodGCList}" var="method" itemLabel="#{method.name}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_methodGC" for="methodGC" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10 uk-form-horizontal">
+                        <h:outputLabel for="analysisGCType" value="#{module.analysisGCType}: ">
+                            <span class="required">*</span>
+                        </h:outputLabel>
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:selectOneMenu id="analysisGCType" 
+                                         value="#{analysisGCEditController.instance.analysisGCType}"
+                                         style="min-width: 200px;"
+                                         required="true"
+                                         disabled="#{analysisGCEditController.forRectification}">
+                            <f:selectItem itemLabel="#{msg.selectOne}" />
+                            <f:selectItems value="#{analysisGCTypeEnum}" var="type" itemLabel="#{module[type.label]}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_analysisGCType" for="analysisGCType" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="gcInfo" value="#{module.gcInfo}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:editor id="gcInfo"
+                                  value="#{analysisGCEditController.instance.gcInfo}"
+                                  controls="bold italic underline subscript superscript color bullets numbering alignleft center alignright justify undo redo pastetext"
+                                  height="150" />
+                    </div>
+                </div>
+
+                <div style="margin-top: 10px;"><span class="required">*</span>#{msg.required}</div>
+
+                <h:button value="#{msg.back}" outcome="analysisGCEdit2" 
+                          class="uk-button" style="margin-top: 20px">   
+                    <f:param name="cid" value="#{analysisGCEditController.conversation.id}"/>
+                </h:button>
+                
+                <h:commandButton value="#{msg.save}" 
+                                 action="#{analysisGCEditController.save}" 
+                                 class="uk-button uk-button-success" 
+                                 style="margin-top: 20px; float: right;" 
+                                 rendered="#{analysisGCEditController.managed}" />
+                
+                <h:commandButton value="#{msg.next}" 
+                                 action="#{analysisGCEditController.submitPage3}" 
+                                 class="uk-button uk-width-1-1" 
+                                 style="margin-top: 20px;" />
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisGCEditController.delete}" 
+                                 class="uk-button uk-button-danger"
+                                 rendered="#{analysisGCEditController.analysisDeletable}" />
+                
+                <h:commandButton value="#{msg.cancel}" 
+                                 action="#{analysisGCEditController.cancel}" 
+                                 immediate="true" 
+                                 class="uk-button" 
+                                 style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

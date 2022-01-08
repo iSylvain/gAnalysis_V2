@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="gAnalysis:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>gAnalysis</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="gAnalysis.war">
+      <element id="artifact" artifact-name="gAnalysis:war exploded" />
+    </root>
+  </artifact>
+</component>

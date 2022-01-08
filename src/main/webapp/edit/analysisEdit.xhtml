@@ -1,0 +1,170 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisEditController.id}" />
+        <f:viewParam name="idAnalysis" value="#{analysisEditController.idAnalysis}" />
+        <f:viewParam name="analysisType" value="#{analysisEditController.analysisType}" />
+        <f:event type="preRenderView"
+                 listener="#{analysisEditController.initConversation()}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 180px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="numberContent activeNumber mainBackground"/>
+            <h:outputText value="2" class="inactiveNumber"/>
+            <h:outputText value="3" class="inactiveNumber"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="summary" value="#{module.summary}: " />
+                        <span class="required">*</span>
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:inputTextarea rows="2"
+                                         id="summary"
+                                         class="uk-form-width-large"
+                                         value="#{analysisEditController.instance.summary}" 
+                                         maxlength="255"
+                                         style="border-radius: 4px; border: 1px solid #dddddd;"
+                                         required="true">
+                            <p:ajax event="blur" update="msg_summary" />
+                        </p:inputTextarea>
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_summary" for="summary" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="preparation" value="#{module.preparation}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:editor id="preparation"
+                                  value="#{analysisEditController.instance.preparation}"
+                                  controls="bold italic underline subscript superscript color bullets numbering alignleft center alignright justify undo redo pastetext"
+                                  height="150" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="appearance" value="#{module.appearance}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:editor id="appearance"
+                                  value="#{analysisEditController.instance.appearanceSample}"
+                                  controls="bold italic underline subscript superscript color bullets numbering alignleft center alignright justify undo redo pastetext"
+                                  height="150" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="calculation" value="#{module.calculation}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:editor id="calculation"
+                                  value="#{analysisEditController.instance.calculation}"
+                                  controls="bold italic underline subscript superscript color bullets numbering alignleft center alignright justify undo redo pastetext"
+                                  height="150" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="analysisInfo" value="#{module.analysisInfo}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:editor id="analysisInfo"
+                                  value="#{analysisEditController.instance.analysisInfo}"
+                                  controls="bold italic underline subscript superscript color bullets numbering alignleft center alignright justify undo redo pastetext"
+                                  height="150" />
+                    </div>
+                </div>
+
+                <ui:fragment rendered="#{!analysisEditController.managed}">
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel value="#{msg.product}:" />
+                            <span class="required">*</span>
+                        </div>
+                        <div class="uk-width-8-10">
+                            <p:dataTable id="productTable"
+                                         value="#{analysisEditController.container.productList}" 
+                                         var="item"
+                                         selection="#{analysisEditController.selectedProduct}" 
+                                         rowKey="#{item.id}"
+                                         rendered="#{!analysisEditController.managed}">
+
+                                <p:column headerText="#{msg.product_name}">
+                                    <h:outputText value="#{item.name_en}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.product_code}">
+                                    <h:outputText value="#{item.code}" />
+                                </p:column>
+
+                                <p:column selectionMode="single" style="width:16px;text-align:center"/>
+
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </ui:fragment>
+
+                <div style="margin-top: 10px;"><span class="required">*</span>#{msg.required}</div>
+
+                <h:commandButton value="#{msg.save}" action="#{analysisEditController.save}" 
+                                 class="uk-button uk-button-success" 
+                                 style="margin-top: 20px; float: right; color: white;" 
+                                 rendered="#{analysisEditController.managed}" />
+                
+                <h:commandButton value="#{msg.next}" action="#{analysisEditController.submitPage1}" 
+                                 class="uk-button uk-width-1-1" 
+                                 style="margin-top: 20px;" />
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisEditController.delete}" 
+                                 class="uk-button uk-button-danger"
+                                 rendered="#{analysisEditController.analysisDeletable}" />
+                
+                <h:commandButton value="#{msg.cancel}" action="#{analysisEditController.cancel}" immediate="true" class="uk-button" style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

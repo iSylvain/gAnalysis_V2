@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisEditController.id}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 180px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="inactiveNumber"/>
+            <h:outputText value="2" class="inactiveNumber"/>
+            <h:outputText value="3" class="numberContent activeNumber mainBackground"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form" enctype="multipart/form-data">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <div class="uk-grid" style="margin-bottom: 20px;">
+                    <div class="uk-width-2-10 uk-form-horizontal">
+                        <h:outputLabel value="#{module.reference}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:fileUpload id="referenceUpload"
+                                      fileUploadListener="#{analysisEditController.handleFileUploadReference}" 
+                                      mode="advanced" 
+                                      dragDropSupport="true"
+                                      sizeLimit="500000" 
+                                      fileLimit="1" 
+                                      allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/"
+                                      update="growl,form"
+                                      rendered="#{!analysisEditController.instance.isReferenceDataWired()}" />
+
+                        <h:outputLabel value="#{module.reference_wired}" rendered="#{analysisEditController.instance.isReferenceDataWired()}" />
+                        <p:commandButton id="referenceDataRemove"
+                                         value="#{msg.delete}" 
+                                         actionListener="#{analysisEditController.removeReferenceData()}" 
+                                         class="uk-button"
+                                         style="margin-left: 10px;"
+                                         rendered="#{analysisEditController.instance.isReferenceDataWired()}"
+                                         update="growl,form" />
+                    </div>
+                </div>
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:button value="#{msg.back}" outcome="analysisEdit2" class="uk-button" style="margin-top: 20px">   
+                    <f:param name="cid" value="#{analysisEditController.conversation.id}"/>
+                </h:button>
+
+                <h:commandButton value="#{msg.save}" 
+                                 action="#{analysisEditController.save}" 
+                                 class="uk-button uk-button-success uk-width-1-1" 
+                                 style="margin-top: 20px; margin-bottom: 20px;" />
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisEditController.delete}" 
+                                 class="uk-button uk-button-danger"
+                                 rendered="#{analysisEditController.analysisDeletable}" />
+                
+                <h:commandButton value="#{msg.cancel}" 
+                                 action="#{analysisEditController.cancel}" 
+                                 immediate="true" 
+                                 class="uk-button" 
+                                 style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

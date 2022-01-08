@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <style type="text/css">
+        .column1to2{width: 25%;}
+        .column2to2{width: 75%;}
+    </style>
+
+    <div class="uk-container uk-container-center uk-margin-top">
+
+        <p:graphicImage value="core/picture/?id=#{productViewController.dataID}"
+                        rendered="#{productViewController.product.dataWired}"
+                        style="margin-bottom: 20px;"/>
+
+        <div style="margin-bottom: 10px;">
+            <h:outputText value="#{productViewController.product.name_msg}" class="uk-h1" style="font-weight: bold;" />
+        </div>
+
+        <h:outputText value="#{productViewController.product.code}" class="uk-h2" />
+
+    </div>
+
+</ui:composition>

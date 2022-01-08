@@ -1,0 +1,194 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisCheckEditController.id}" />
+        <f:viewParam name="idAnylsisCheck" value="#{analysisCheckEditController.idAnalysisCheck}" />
+        <f:event type="preRenderView"
+                 listener="#{analysisCheckEditController.initConversation()}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 60px; margin: auto; padding-top: 40px;"> 
+            <div class="activeNumber mainBackground">
+                <h:outputText value="1" class="numberContent"/>
+            </div>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisCheckEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="checkSAP" value="#{module.checkSAP}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:selectBooleanCheckbox id="checkSAP" value="#{analysisCheckEditController.instance.checkSAP}" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="checkCO" value="#{module.checkCO}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:selectBooleanCheckbox id="checkCO" value="#{analysisCheckEditController.instance.checkCO}" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="checkAppearance" value="#{module.checkAppearance}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:selectBooleanCheckbox id="checkAppearance" value="#{analysisCheckEditController.instance.checkAppearance}" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="info" value="#{msg.info}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:editor id="info"
+                                  value="#{analysisCheckEditController.instance.information}"
+                                  controls="bold italic underline subscript superscript color bullets numbering alignleft center alignright justify undo redo pastetext"
+                                  height="150" />
+                    </div>
+                </div>
+
+                <ui:fragment rendered="#{analysisCheckEditController.container.analysisListWired}">
+
+                    <p:panel id="panelForm" style="margin-top: 20px; margin-bottom: 20px;">
+
+                        <div class="uk-grid" style="margin-bottom: 20px;">
+                            <div class="uk-width-1-1">
+                                <h:outputLabel value="#{module.analysis}: " />
+                            </div>
+                        </div>
+
+                        <script type="text/javascript">
+                            function handleDrop(event, ui) {
+                                var dropped = ui.draggable;
+
+                                dropped.fadeOut('fast');
+                            }
+                        </script>
+
+                        <p:dataGrid id="availableAnalysis"
+                                    var="analysis" 
+                                    value="#{analysisCheckEditController.analysisListAvailable}"  
+                                    layout="grid"
+                                    columns="3"
+                                    emptyMessage="#{module.analysisAvailable_list_empty}"> 
+
+                            <p:panel id="pnl" header="#{analysis.number}" style="text-align:center">
+                                <h:outputText value="#{analysis.typeOfAnalysis}" class="uk-h5" />
+                                <br/>
+                                <h:outputText value="#{analysis.summary}" class="uk-h5" />
+                            </p:panel>
+
+                            <p:draggable for="pnl" revert="true" handle=".ui-panel-titlebar" stack=".ui-panel"/>
+                        </p:dataGrid>
+
+                        <p:fieldset id="dropArea" 
+                                    style="margin-top:20px; padding-top: 50px; padding-bottom: 50px; border: 1px solid #dddddd;">
+
+                            <p:outputPanel>
+
+                                <div style="text-align: center;">
+                                    <h:outputText value="#{module.analysis_drop_here}"
+                                                  class="uk-h3" />
+                                </div>
+
+                            </p:outputPanel>
+                        </p:fieldset>
+
+                        <p:droppable for="dropArea" 
+                                     tolerance="touch" 
+                                     activeStyleClass="ui-state-highlight" 
+                                     datasource="availableAnalysis" 
+                                     onDrop="handleDrop">
+                            <p:ajax listener="#{analysisCheckEditController.onDrop}" 
+                                    update="panelForm" />
+                        </p:droppable>
+
+                        <p:dataTable id="selectedTable" 
+                                     var="analysisSelected" 
+                                     value="#{analysisCheckEditController.analysisListSelected}" 
+                                     rendered="#{not empty analysisCheckEditController.analysisListSelected}"
+                                     draggableRows="true"
+                                     style="margin-top: 20px;">
+
+                            <p:column headerText="#{module.analysis}"
+                                      style="text-align:center;">
+                                <h:outputText value="#{module[analysisSelected.typeOfAnalysis]}" />
+                            </p:column>
+
+                            <p:column headerText="#{module.analysis_number}"
+                                      style="text-align:center;">
+                                <h:outputText value="#{analysisSelected.number}" />
+                            </p:column>
+
+                            <p:column headerText="#{module.summary}">
+                                <h:outputText value="#{analysisSelected.summary}" />
+                            </p:column>
+
+                            <p:column headerText="#{msg.action}"
+                                      style="text-align:center; max-width: 100px;">  
+                                <p:commandLink value="#{msg.delete}"
+                                               class="mainColor"
+                                               process="@this"
+                                               actionListener="#{analysisCheckEditController.deleteAnalysis(analysisSelected)}"
+                                               update="selectedTable" /> 
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </p:panel>
+
+                </ui:fragment>
+
+                <h:commandButton value="#{msg.save}" action="#{analysisCheckEditController.save}" 
+                                 class="uk-button uk-button-success"
+                                 style="width: 100%; margin-top: 20px; margin-bottom: 20px; float: right; color: white;" />
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisCheckEditController.delete}" 
+                                 class="uk-button uk-button-danger" />
+                
+                <h:commandButton value="#{msg.cancel}" action="#{analysisCheckEditController.cancel}" immediate="true" class="uk-button" style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

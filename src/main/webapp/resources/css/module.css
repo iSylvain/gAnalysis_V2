@@ -1,0 +1,141 @@
+/* Module base
+ ========================================================================== */
+.mainColor {
+    color: #6C40F3;
+}
+.mainBackground {
+    background: #6C40F3;
+}
+.uk-button-module {
+    background-color: #6C40F3;
+    color: #ffffff;
+}
+/* Hover */
+.uk-button-module:hover,
+.uk-button-module:focus {
+    background-color: #8361EB;
+    color: #ffffff;
+}
+/* Active */
+.uk-button-module:active,
+.uk-button-module.uk-active {
+    background-color: #5A29EF;
+    color: #ffffff;
+}
+a,
+.uk-link-module {
+    color: #6C40F3;
+    text-decoration: none;
+    cursor: pointer;
+}
+a:hover,
+.uk-link-module:hover {
+    color: #8361EB;
+    text-decoration: underline;
+}
+.ui-fieldset-toggleable .ui-fieldset-legend {
+    color: #6C40F3;
+} 
+
+.box-border-green {
+    border: 1px solid #8cc14c;
+}
+
+.box-border-orange {
+    border: 1px solid #faa732;
+}
+
+.box-border-red {
+    border: 1px solid #da314b;
+}
+
+/*
+Primefaces
+*/
+.ui-state-highlight{ 
+    /* module color */
+    background: #8361EB!important;
+}
+.ui-tabs.ui-tabs-top .ui-tabs-nav.ui-widget-header li.ui-state-active {
+    /* module color */
+    border: 1px!important;
+    border-color: #6C40F3!important; 
+    background: #6C40F3!important;
+}
+.ui-fieldset-toggleable .ui-fieldset-legend {
+    /* module color */
+    background: #8361EB!important;
+} 
+.ui-lightbox-content {
+    background-color: white!important;
+}
+
+.ui-widget-content a {
+    color: #6C40F3!important; 
+}
+
+/**** gCore
+main #07A7F7
+focus 28B7FF
+active 0475AE*/
+.gCore_color {
+    color: #07A7F7!important;
+} 
+.gCore_background_color {
+    background-color: #07A7F7!important;
+} 
+
+/**** gSafety
+main E93A6A
+focus FC5F8A
+active B62950*/
+.gSafety_color {
+    color: #E93A6A!important;
+} 
+.gSafety_background_color {
+    background-color: #E93A6A!important;
+} 
+
+/**** gFrog
+main 00A164
+focus 00AE6C
+active 00643E*/
+.gFrog_color {
+    color: #00A164!important;
+} 
+.gFrog_background_color {
+    background-color: #00A164!important;
+}  
+
+/**** gAnalysis
+main 6C40F3
+focus 8361EB
+active 5A29EF*/
+.gAnalysis_color {
+    color: #6C40F3!important;
+} 
+.gAnalysis_background_color {
+    background-color: #6C40F3!important;
+}  
+
+/**** gProducts
+main 00B4B2
+focus 01CCCA
+active 009593*/
+.gProducts_color {
+    color: #00B4B2!important;
+} 
+.gProducts_background_color {
+    background-color: #00B4B2!important;
+}  
+
+/**** gSynthesis
+main F8B402
+focus F1BC32
+active DEA103*/
+.gSynthesis_color {
+    color: #F8B402!important;
+} 
+.gSynthesis_background_color {
+    background-color: #F8B402!important;
+}  

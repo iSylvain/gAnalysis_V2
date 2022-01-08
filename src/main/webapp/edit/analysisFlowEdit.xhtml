@@ -1,0 +1,175 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisFlowEditController.id}" />
+        <f:viewParam name="idAnalysisFlow" value="#{analysisFlowEditController.idAnalysisFlow}" />
+        <f:event type="preRenderView"
+                 listener="#{analysisFlowEditController.initConversation()}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 120px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="numberContent activeNumber mainBackground"/>
+            <h:outputText value="2" class="inactiveNumber"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisFlowEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="processCode" value="#{module.procedureCode}: " />
+                        <span class="required">*</span>
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:inputText id="processCode" 
+                                     value="#{analysisFlowEditController.instance.processCode}"
+                                     required="true"
+                                     autocomplete="false">
+                            <p:ajax event="blur" update="msg_processCode" />
+                        </p:inputText>
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_processCode" for="processCode" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="processVersion" value="#{module.procedureVersion}: " />
+                        <span class="required">*</span>
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:spinner id="processVersion" 
+                                   value="#{analysisFlowEditController.instance.processVersion}"
+                                   required="true"
+                                   size="1"
+                                   converter="javax.faces.Integer">
+                            <p:ajax event="blur" update="msg_processVersion" />
+                        </p:spinner> 
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_processVersion" for="processVersion" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="operation" value="#{module.operation}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:inputText id="operation" 
+                                     value="#{analysisFlowEditController.instance.operation}"
+                                     required="false"
+                                     autocomplete="false"
+                                     maxlength="25">
+                        </p:inputText>
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="locationDetail" value="#{module.locationDetail}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:inputText id="locationDetail" 
+                                     value="#{analysisFlowEditController.instance.locationDetail}"
+                                     required="false"
+                                     autocomplete="false"
+                                     maxlength="25">
+                        </p:inputText>
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="info" value="#{msg.info}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:editor id="info"
+                                  value="#{analysisFlowEditController.instance.information}"
+                                  controls="bold italic underline subscript superscript color bullets numbering alignleft center alignright justify undo redo pastetext"
+                                  height="150" />
+                    </div>
+                </div>
+
+                <ui:fragment rendered="#{!analysisFlowEditController.managed}">
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel value="#{msg.product}:" />
+                            <span class="required">*</span>
+                        </div>
+                        <div class="uk-width-8-10">
+                            <p:dataTable id="productTable"
+                                         value="#{analysisFlowEditController.container.productList}" 
+                                         var="item"
+                                         selection="#{analysisFlowEditController.selectedProduct}" 
+                                         rowKey="#{item.id}"
+                                         rendered="#{!analysisFlowEditController.managed}">
+
+                                <p:column headerText="#{msg.product_name}">
+                                    <h:outputText value="#{item.name_en}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.product_code}">
+                                    <h:outputText value="#{item.code}" />
+                                </p:column>
+
+                                <p:column selectionMode="single" style="width:16px;text-align:center"/>
+
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </ui:fragment>
+
+                <div style="margin-top: 10px;"><span class="required">*</span>#{msg.required}</div>
+
+                <h:commandButton value="#{msg.save}" action="#{analysisFlowEditController.save}" 
+                                 class="uk-button uk-button-success" 
+                                 style="margin-top: 20px; float: right; color: white;" 
+                                 rendered="#{analysisFlowEditController.managed}" />
+                
+                <h:commandButton value="#{msg.next}" action="#{analysisFlowEditController.submitPage1}" 
+                                 class="uk-button uk-width-1-1" 
+                                 style="margin-top: 20px;" />
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisFlowEditController.delete}" 
+                                 class="uk-button uk-button-danger" />
+
+                <h:commandButton value="#{msg.cancel}" action="#{analysisFlowEditController.cancel}" immediate="true" class="uk-button" style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

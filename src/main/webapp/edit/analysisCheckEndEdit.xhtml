@@ -1,0 +1,220 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisCheckEndEditController.id}" />
+        <f:viewParam name="idAnylsisCheckEnd" value="#{analysisCheckEndEditController.idAnalysisCheckEnd}" />
+        <f:event type="preRenderView"
+                 listener="#{analysisCheckEndEditController.initConversation()}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 180px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="numberContent activeNumber mainBackground"/>
+            <h:outputText value="2" class="inactiveNumber"/>
+            <h:outputText value="3" class="inactiveNumber"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisCheckEndEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="operation" value="#{module.phase}: " />
+                        <span class="required">*</span>
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:inputText id="operation" 
+                                     value="#{analysisCheckEndEditController.instance.operation}"
+                                     required="true"
+                                     autocomplete="false">
+                            <p:ajax event="blur" update="msg_operation" />
+                        </p:inputText>
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_operation" for="operation" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10 uk-form-horizontal">
+                        <h:outputLabel for="analysisCheckEndEnum" value="#{module.analysisCheckEndEnum}: ">
+                            <span class="required">*</span>
+                        </h:outputLabel>
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:selectOneMenu id="analysisCheckEndEnum" 
+                                         value="#{analysisCheckEndEditController.instance.analysisCheckEndEnum}"
+                                         style="min-width: 200px;"
+                                         required="true">
+                            <f:selectItem itemLabel="#{msg.selectOne}" />
+                            <f:selectItems value="#{analysisCheckEndEnum}" var="type" itemLabel="#{module[type.label]}" />
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_analysisCheckEndEnum" for="analysisCheckEndEnum" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="info" value="#{msg.info}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:editor id="info"
+                                  value="#{analysisCheckEndEditController.instance.information}"
+                                  controls="bold italic underline subscript superscript color bullets numbering alignleft center alignright justify undo redo pastetext"
+                                  height="150" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="productNameStart" value="#{module.productNameStart}: " />
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:inputText id="productNameStart" 
+                                     value="#{analysisCheckEndEditController.instance.productNameStart}"
+                                     required="false"
+                                     autocomplete="false">
+                            <p:ajax event="blur" update="msg_productNameStart" />
+                        </p:inputText>
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_productNameStart" for="productNameStart" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="productCodeStart" value="#{module.productCodeStart}: " />
+                    </div>
+                    <div class="uk-width-5-10">
+                        <p:inputText id="productCodeStart" 
+                                     value="#{analysisCheckEndEditController.instance.productCodeStart}"
+                                     required="false"
+                                     autocomplete="false">
+                            <p:ajax event="blur" update="msg_productCodeStart" />
+                        </p:inputText>
+                    </div>
+                    <div class="uk-width-3-10">
+                        <p:message id="msg_productCodeStart" for="productCodeStart" display="text" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="checkSAP" value="#{module.checkSAP}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:selectBooleanCheckbox id="checkSAP" value="#{analysisCheckEndEditController.instance.checkSAP}" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="checkCO" value="#{module.checkCO}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:selectBooleanCheckbox id="checkCO" value="#{analysisCheckEndEditController.instance.checkCO}" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="checkAppearance" value="#{module.checkAppearance}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:selectBooleanCheckbox id="checkAppearance" value="#{analysisCheckEndEditController.instance.checkAppearance}" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">
+                        <h:outputLabel for="info" value="#{module.informationAnalysis}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:editor id="infoAnalysis"
+                                  value="#{analysisCheckEndEditController.instance.informationAnalysis}"
+                                  controls="bold italic underline subscript superscript color bullets numbering alignleft center alignright justify undo redo pastetext"
+                                  height="150" />
+                    </div>
+                </div>
+
+                <ui:fragment rendered="#{!analysisCheckEndEditController.managed}">
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel value="#{msg.product}:" />
+                            <span class="required">*</span>
+                        </div>
+                        <div class="uk-width-8-10">
+                            <p:dataTable id="productTable"
+                                         value="#{analysisCheckEndEditController.container.productList}" 
+                                         var="item"
+                                         selection="#{analysisCheckEndEditController.selectedProduct}" 
+                                         rowKey="#{item.id}"
+                                         rendered="#{!analysisCheckEndEditController.managed}">
+
+                                <p:column headerText="#{msg.product_name}">
+                                    <h:outputText value="#{item.name_en}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg.product_code}">
+                                    <h:outputText value="#{item.code}" />
+                                </p:column>
+
+                                <p:column selectionMode="single" style="width:16px;text-align:center"/>
+
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </ui:fragment>
+
+                <h:commandButton value="#{msg.save}" action="#{analysisCheckEndEditController.save}" 
+                                 class="uk-button uk-button-success" 
+                                 style="margin-top: 20px; float: right; color: white;" 
+                                 rendered="#{analysisCheckEndEditController.managed}" />
+                
+                <h:commandButton value="#{msg.next}" action="#{analysisCheckEndEditController.submitPage1}" 
+                                 class="uk-button uk-width-1-1" 
+                                 style="margin-top: 20px;" />
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisCheckEndEditController.delete}" 
+                                 class="uk-button uk-button-danger" />
+
+                <h:commandButton value="#{msg.cancel}" action="#{analysisCheckEndEditController.cancel}" immediate="true" class="uk-button" style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

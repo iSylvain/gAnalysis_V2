@@ -1,0 +1,268 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+
+    <factory>
+        <exception-handler-factory>com.givaudan.galaxy.exception.ViewExceptionHandlerFactory</exception-handler-factory>
+    </factory>
+    
+    <application>
+        <locale-config>
+            <default-locale>en</default-locale>
+            <supported-locale>fr</supported-locale>
+            <!--<supported-locale>de</supported-locale>-->
+            <!--<supported-locale>es</supported-locale>-->
+        </locale-config>
+        <resource-bundle>
+            <base-name>messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>module</base-name>
+            <var>module</var>
+        </resource-bundle>
+    </application>
+   
+    <navigation-rule>
+        
+        <from-view-id>/*</from-view-id>
+        
+        <navigation-case>
+            <from-outcome>error</from-outcome>
+            <to-view-id>/error.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+ 
+    </navigation-rule>
+
+    <navigation-rule>
+        
+        <from-view-id>/edit/containerEdit*</from-view-id>
+        
+        <navigation-case>
+            <from-outcome>containerEdit2</from-outcome>
+            <to-view-id>/edit/containerEdit2.xhtml</to-view-id>
+            <redirect include-view-params="true"/>
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>saved</from-outcome>
+            <to-view-id>/home.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>cancelled</from-outcome>
+            <to-view-id>/home.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>deleted</from-outcome>
+            <to-view-id>/home.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+ 
+    </navigation-rule>
+
+    <navigation-rule>
+        
+        <from-view-id>/edit/analysisGCEdit*</from-view-id>
+
+        <navigation-case>
+            <from-outcome>analysisGCEdit2</from-outcome>
+            <to-view-id>/edit/analysisGCEdit2.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>analysisGCEdit3</from-outcome>
+            <to-view-id>/edit/analysisGCEdit3.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>analysisGCEdit4</from-outcome>
+            <to-view-id>/edit/analysisGCEdit4.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>saved</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>cancelled</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>deleted</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+    </navigation-rule>
+
+    <navigation-rule>
+        
+        <from-view-id>/edit/analysisEdit*</from-view-id>
+
+        <navigation-case>
+            <from-outcome>analysisEdit2</from-outcome>
+            <to-view-id>/edit/analysisEdit2.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>analysisEdit3</from-outcome>
+            <to-view-id>/edit/analysisEdit3.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>saved</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>cancelled</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>deleted</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+    </navigation-rule>
+
+    <navigation-rule>
+        
+        <from-view-id>/edit/analysisFlowEdit*</from-view-id>
+
+        <navigation-case>
+            <from-outcome>analysisFlowEdit2</from-outcome>
+            <to-view-id>/edit/analysisFlowEdit2.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>analysisFlowEdit3</from-outcome>
+            <to-view-id>/edit/analysisFlowEdit3.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>saved</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>cancelled</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>deleted</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+    </navigation-rule>
+
+    <navigation-rule>
+        
+        <from-view-id>/edit/analysisCheckEdit*</from-view-id>
+
+        <navigation-case>
+            <from-outcome>saved</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>cancelled</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>deleted</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+    </navigation-rule>
+
+    <navigation-rule>
+        
+        <from-view-id>/edit/analysisCheckEndEdit*</from-view-id>
+
+        <navigation-case>
+            <from-outcome>analysisCheckEndEdit2</from-outcome>
+            <to-view-id>/edit/analysisCheckEndEdit2.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>analysisCheckEndEdit3</from-outcome>
+            <to-view-id>/edit/analysisCheckEndEdit3.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+
+        <navigation-case>
+            <from-outcome>saved</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>cancelled</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>deleted</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+    </navigation-rule>
+
+    <navigation-rule>
+        
+        <from-view-id>/edit/datasEdit*</from-view-id>
+
+        <navigation-case>
+            <from-outcome>saved</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>cancelled</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+        <navigation-case>
+            <from-outcome>deleted</from-outcome>
+            <to-view-id>/productView.xhtml</to-view-id>
+            <redirect include-view-params="true" />
+        </navigation-case>
+ 
+    </navigation-rule>
+
+</faces-config>

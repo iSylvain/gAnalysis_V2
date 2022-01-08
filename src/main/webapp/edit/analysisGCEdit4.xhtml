@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisGCEditController.id}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 240px; margin: auto; padding-top: 40px;"> 
+            <h:outputText value="1" class="inactiveNumber"/>
+            <h:outputText value="2" class="inactiveNumber"/>
+            <h:outputText value="3" class="inactiveNumber"/>
+            <h:outputText value="4" class="numberContent activeNumber mainBackground"/>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <div style="margin-top: 20px; margin-bottom: 20px; text-align: center;">
+                <h3>
+                    <h:outputLabel value="#{analysisGCEditController.product.name_en}" />
+                </h3>
+            </div>
+
+            <h:form id="form"
+                    enctype="multipart/form-data">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10 uk-form-horizontal">
+                        <h:outputLabel for="referenceUpload" value="#{module.reference}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:fileUpload id="referenceUpload"
+                                      fileUploadListener="#{analysisGCEditController.handleFileUploadReference}" 
+                                      mode="advanced" 
+                                      dragDropSupport="true"
+                                      sizeLimit="500000" 
+                                      fileLimit="1" 
+                                      allowTypes="/(\.|\/)(pdf)$/"
+                                      update="growl,form"
+                                      rendered="#{!analysisGCEditController.instance.isReferenceDataWired()}" />
+                        
+                        <h:outputLabel value="#{module.reference_wired}" rendered="#{analysisGCEditController.instance.isReferenceDataWired()}" />
+                        <p:commandButton id="referenceDataRemove"
+                                         value="#{msg.delete}" 
+                                         actionListener="#{analysisGCEditController.removeReferenceData()}" 
+                                         class="uk-button"
+                                         style="margin-left: 10px;"
+                                         rendered="#{analysisGCEditController.instance.isReferenceDataWired()}"
+                                         update="growl,form" />
+                    </div>
+                </div>
+
+                <div class="uk-grid">
+                    <div class="uk-width-2-10 uk-form-horizontal">
+                        <h:outputLabel for="dataUpload" value="#{msg.file}: " />
+                    </div>
+                    <div class="uk-width-8-10">
+                        <p:fileUpload id="dataUpload"
+                                      fileUploadListener="#{analysisGCEditController.handleFileUpload}" 
+                                      mode="advanced" 
+                                      dragDropSupport="true"
+                                      sizeLimit="500000" 
+                                      fileLimit="1" 
+                                      allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|doc|docx|xls|xlsx)$/"
+                                      update="growl,form"
+                                      disabled="#{!analysisGCEditController.ifMaxFiles()}" />
+                    </div>
+                </div>
+
+                <p:dataTable id="datas"
+                             styleClass="hide_headerTable"
+                             style="margin-top: 20px;"
+                             var="data"
+                             value="#{analysisGCEditController.instance.datas}"
+                             emptyMessage="#{module.datas_list_empty}">  
+
+                    <p:column headerText="#{msg.name}">  
+                        <h:outputText value="#{data.name}" />  
+                    </p:column>
+
+                    <p:column headerText="#{msg.file_type}">  
+                        <h:outputText value="#{data.mime}" />  
+                    </p:column>
+
+                    <p:column headerText="#{msg.action}">  
+                        <p:commandLink value="#{msg.delete}"
+                                       class="mainColor"
+                                       process="@this"
+                                       actionListener="#{analysisGCEditController.removeData(data)}"
+                                       update=":form" /> 
+                    </p:column>
+
+                </p:dataTable>
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:button value="#{msg.back}" outcome="analysisGCEdit3" class="uk-button" style="margin-top: 20px">   
+                    <f:param name="cid" value="#{analysisGCEditController.conversation.id}"/>
+                </h:button>
+                
+                <h:commandButton value="#{msg.save}" action="#{analysisGCEditController.save}" 
+                                 class="uk-button uk-button-success uk-width-1-1" 
+                                 style="margin-top: 20px; margin-bottom: 20px;" />
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{analysisGCEditController.delete}" 
+                                 class="uk-button uk-button-danger"
+                                 rendered="#{analysisGCEditController.analysisDeletable}" />
+                
+                <h:commandButton value="#{msg.cancel}" 
+                                 action="#{analysisGCEditController.cancel}" 
+                                 immediate="true" 
+                                 class="uk-button" 
+                                 style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

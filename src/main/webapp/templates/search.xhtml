@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="search-form">
+
+        <div style="margin: auto;"> 
+            
+            <p:autoComplete id="productSearch" 
+                            queryDelay="1000" 
+                            minQueryLength="3"
+                            var="item" 
+                            itemLabel="#{item.text}" 
+                            itemValue="#{item}" 
+                            converter="objectConverter" 
+                            completeMethod="#{resultSearchController.searchResultList}"
+                            maxResults="25"
+                            effect="fade"
+                            emptyMessage="#{msg.result_empty}">
+ 
+                <p:ajax event="itemSelect" listener="#{resultSearchController.onResultSelect}" immediate="false" />
+                
+            </p:autoComplete>
+            
+            <p:watermark for="productSearch" value="#{msg.searchByNameOrCode}" id="watermark" />
+            
+        </div>
+
+    </h:form> 
+
+</ui:composition>

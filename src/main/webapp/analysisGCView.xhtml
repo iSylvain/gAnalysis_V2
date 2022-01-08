@@ -1,0 +1,252 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/templateView.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{analysisGCViewController.id}" />
+        <f:event listener="#{analysisGCViewController.load}" type="preRenderView" />
+    </f:metadata>
+
+    <ui:define name="content">
+
+        <h:form class="uk-container uk-container-center uk-margin-top">
+
+            <h:commandLink class="uk-button uk-button-module"  
+                           value="pdf" 
+                           action="#{analysisGCReportController.load(analysisGCViewController.instance.id)}" 
+                           style="float: right;" 
+                           target="_blank" />
+        </h:form>
+
+        <div class="uk-container uk-container-center" style="margin-top: 50px;">
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.summary}</div>
+                <div class="uk-width-8-10">#{analysisGCViewController.instance.summary}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.analysis_number}</div>
+                <div class="uk-width-8-10">#{analysisGCViewController.instance.number}</div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.typeOfAnalysis}</div>
+                <div class="uk-width-8-10">#{analysisGCViewController.instance.typeOfAnalysis}</div>
+            </div>
+
+<!--            <div class="uk-grid">-->
+<!--                <div class="uk-width-2-10">#{module.sensitive}</div>-->
+<!--                <div class="uk-width-8-10"><h:graphicImage value="#{productViewController.instance.sensitive ? 'resources/img/approval.png' : 'resources/img/error.png'}" style="margin-right: 5px; vertical-align: middle" /></div>-->
+<!--            </div>-->
+
+            <ui:fragment rendered="#{analysisGCViewController.instance.analysisInfoWired()}">           
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.analysisInfo}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisGCViewController.instance.analysisInfo}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisGCViewController.instance.appearanceSampleWired()}">           
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.appearance}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisGCViewController.instance.appearanceSample}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisGCViewController.instance.preparationWired()}">           
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.preparation}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisGCViewController.instance.preparation}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisGCViewController.instance.calculationWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.calculation}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisGCViewController.instance.calculation}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.programGC}</div>
+                <div class="uk-width-8-10">
+
+                    <p:commandLink value="#{analysisGCViewController.instance.program.name}" 
+                                   onclick="PF('dlg1').show();" />
+
+                    <p:dialog header="#{module.programGC}" widgetVar="dlg1" modal="true" width="400" resizable="false">
+                        <h:outputText value="#{analysisGCViewController.instance.program.name}" class="uk-h3" />
+                        <br/>
+                        <h:outputText value="#{analysisGCViewController.instance.program.programInfo}" />
+                        <br/>
+                        <h:outputText value="Start temp. : #{analysisGCViewController.instance.program.startTemp}°C" />
+                        <br/>
+                        <h:outputText value="Start time : #{analysisGCViewController.instance.program.startTime} min" />
+                        <br/>
+                        <h:outputText value="Ramp : #{analysisGCViewController.instance.program.ramp} °C/min" />
+                        <br/>
+                        <h:outputText value="Final temp. : #{analysisGCViewController.instance.program.finalTemp} °C" />
+                        <br/>
+                        <h:outputText value="Final time : #{analysisGCViewController.instance.program.finalTime} min" />
+                        <br/>
+                        <h:outputText value="Split : #{analysisGCViewController.instance.program.split}" />
+                        <br/>
+                        <h:outputText value="Column : #{analysisGCViewController.instance.program.column.name}" />
+                    </p:dialog>   
+
+                </div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.methodGC}</div>
+                <div class="uk-width-8-10">
+
+                    <p:commandLink value="#{analysisGCViewController.instance.method.name}" 
+                                   onclick="PF('dlg2').show();" />
+
+                    <p:dialog header="#{module.methodGC}" widgetVar="dlg2" modal="true" width="400" resizable="false">
+                        <h:outputText value="#{analysisGCViewController.instance.method.name}" />
+                        <br/>
+                        <h:outputText value="#{analysisGCViewController.instance.method.methodInfo}" />
+                        <br/>
+                        <h:outputText value="Type : #{module[analysisGCViewController.instance.method.methodGCType.label]}" />
+                    </p:dialog>   
+
+                </div>
+            </div>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.analysisGCType}</div>
+                <div class="uk-width-8-10">#{module[analysisGCViewController.instance.analysisGCType.label]}</div>
+            </div>
+
+            <ui:fragment rendered="#{analysisGCViewController.instance.gcInfoWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.gcInfo}</div>
+                    <div class="uk-width-8-10">
+                        <p:outputLabel value="#{analysisGCViewController.instance.gcInfo}" escape="false" />
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <div class="uk-grid">
+                <div class="uk-width-2-10">#{module.analysisStandard}</div>
+                <div class="uk-width-8-10">
+
+                    <p:dataTable id="standards"
+                                 var="standard" 
+                                 value="#{analysisGCViewController.instance.standards}"
+                                 emptyMessage="#{module.analysisStandard_list_empty}">  
+
+                        <p:column headerText="#{msg.name}">  
+                            <h:outputText value="#{standard.name}" />  
+                        </p:column>
+
+                        <p:column headerText="#{module.analysisStandardID}" style="text-align: center;" >  
+                            <h:outputText value="#{standard.analysisStandardID}" />  
+                        </p:column>
+
+                        <p:column headerText="#{module.minimumStandard}" style="text-align: center;" >  
+                            <h:outputText value="#{standard.minimumStandard} #{standard.unit}" />  
+                        </p:column>
+
+                        <p:column headerText="#{module.maximumStandard}" style="text-align: center;" >  
+                            <h:outputText value="#{standard.maximumStandard} #{standard.unit}" />  
+                        </p:column>
+
+                    </p:dataTable>
+
+                </div>
+            </div>
+
+            <ui:fragment rendered="#{analysisGCViewController.instance.isReferenceDataWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{module.reference}</div>
+                    <div class="uk-width-8-10">
+
+                        <h:form>
+                            <p:commandLink class="uk-button-button"  
+                                           value="#{msg.view}" 
+                                           action="#{analysisGCViewController.openReference()}"
+                                           ajax="false" immediate="false" target="_blank"/>
+                        </h:form>
+
+                    </div>
+                </div>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{analysisGCViewController.instance.isDatasWired()}">
+                <div class="uk-grid">
+                    <div class="uk-width-2-10">#{msg.file_attachement}</div>
+                    <div class="uk-width-8-10">
+
+                        <h:form>
+
+                            <style type="text/css">
+                                .ui-datalist-data{padding-left: 0px!important;}
+                            </style>
+
+                            <p:dataList value="#{analysisGCViewController.instance.datas}" 
+                                        var="data">
+
+                                <div style="margin-bottom: 10px;">
+
+                                    <p:panelGrid columns="2" layout="grid" columnClasses="column1to2,column2to2">
+
+                                        <p:commandButton value="#{msg.download}" 
+                                                         ajax="false" 
+                                                         onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                                         icon="ui-icon-arrowthick-1-s"
+                                                         rendered="#{data.mime != 'pdf'}">
+                                            <p:fileDownload value="#{analysisGCViewController.fileDownload(data)}" />
+                                        </p:commandButton>
+
+                                        <p:commandLink class="uk-button-button"  
+                                                       value="#{msg.view}" 
+                                                       action="#{analysisGCViewController.openPDF(data)}"
+                                                       rendered="#{data.mime == 'pdf'}"
+                                                       ajax="false" immediate="false" target="_blank"/>
+
+                                        <h:outputText value="#{data.name} (#{data.mime})" style="margin-left: 20px;" class="uk-h5" />
+
+                                    </p:panelGrid>
+
+                                </div>
+
+                            </p:dataList>
+                        </h:form>
+
+                        <script type="text/javascript">
+                            function start() {
+                                PF('statusDialog').show();
+                            }
+
+                            function stop() {
+                                PF('statusDialog').hide();
+                            }
+                        </script>
+
+                    </div>
+                </div>
+            </ui:fragment>
+
+        </div>
+
+        <!--</ui:fragment>-->
+
+    </ui:define>
+
+</ui:composition>

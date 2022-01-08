@@ -1,0 +1,186 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/templates/template.xhtml">
+
+    <ui:param name="edit" value="true"/>
+    <ui:param name="messages" value="true"/>
+    <ui:param name="footer" value="true"/>
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{containerEditController.id}" />
+        <f:event type="preRenderView"
+                 listener="#{containerEditController.initConversation()}" />
+    </f:metadata>
+
+    <ui:define name="editHeader">
+
+        <div style="width: 120px; margin: auto; padding-top: 40px;"> 
+            <div class="activeNumber mainBackground">
+                <h:outputText value="1" class="numberContent"/>
+            </div>
+            <div class="inactiveNumber">2</div>
+        </div>
+
+    </ui:define>
+
+    <ui:define name="content">
+
+        <div class="uk-container uk-container-center uk-margin-top">
+
+            <h:form id="form">
+
+                <p:growl id="growl" showDetail="true" sticky="true" />
+
+                <div style="margin-top: 20px;">
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="name_en" 
+                                           value="#{msg.product_name_en}: ">
+                            </h:outputLabel>
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="name_en" 
+                                         value="#{containerEditController.instance.name_en}"
+                                         required="false"
+                                         autocomplete="false"
+                                         class="uk-form-width-large">
+                                <p:ajax event="blur" update="msg_name_en" />
+                            </p:inputText>
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message id="msg_name_en" for="name_en" display="text" />
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="name_fr" 
+                                           value="#{msg.product_name_fr}: ">
+                            </h:outputLabel>
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="name_fr" 
+                                         value="#{containerEditController.instance.name_fr}"
+                                         required="false"
+                                         autocomplete="false"
+                                         class="uk-form-width-large">
+                                <p:ajax event="blur" update="msg_name_fr" />
+                            </p:inputText>
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message id="msg_name_fr" for="name_fr" display="text" />
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="name_es" 
+                                           value="#{msg.product_name_es}: ">
+                            </h:outputLabel>
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="name_es" 
+                                         value="#{containerEditController.instance.name_es}"
+                                         required="false"
+                                         autocomplete="false"
+                                         class="uk-form-width-large">
+                                <p:ajax event="blur" update="msg_name_es" />
+                            </p:inputText>
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message id="msg_name_es" for="name_es" display="text" />
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="name_de" 
+                                           value="#{msg.product_name_de}: ">
+                            </h:outputLabel>
+                        </div>
+                        <div class="uk-width-5-10">
+                            <p:inputText id="name_de" 
+                                         value="#{containerEditController.instance.name_de}"
+                                         required="false"
+                                         autocomplete="false"
+                                         class="uk-form-width-large">
+                                <p:ajax event="blur" update="msg_name_de" />
+                            </p:inputText>
+                        </div>
+                        <div class="uk-width-3-10">
+                            <p:message id="msg_name_de" for="name_de" display="text" />
+                        </div>
+                    </div>
+
+                    <div class="uk-grid">
+                        <div class="uk-width-2-10">
+                            <h:outputLabel for="info" value="#{msg.info}: " />
+                        </div>
+                        <div class="uk-width-8-10">
+                            <p:inputTextarea rows="6"
+                                             id="info"
+                                             class="uk-form-width-large"
+                                             value="#{containerEditController.instance.containerInformation}" 
+                                             maxlength="255"
+                                             style="border-radius: 4px; border: 1px solid #dddddd;"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+
+                    <p:dataTable id="productTable"
+                                 styleClass="hide_headerTable"
+                                 value="#{containerEditController.instance.productList}" 
+                                 var="item">
+
+                        <p:column headerText="#{msg.product_name}">
+                            <h:outputText value="#{item.name_en}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.product_code}">
+                            <h:outputText value="#{item.code}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg.action}" style="text-align: center;">  
+                            <p:commandLink value="#{msg.delete}"
+                                           class="mainColor"
+                                           process="@this"
+                                           actionListener="#{containerEditController.removeItem(item)}"
+                                           update="productTable, form:growl" /> 
+                        </p:column>
+
+                    </p:dataTable>
+
+                </div>
+
+                <h:commandButton value="#{msg.save}" action="#{containerEditController.save}" 
+                                 class="uk-button uk-button-success" 
+                                 style="margin-top: 20px; float: right; color: white;" 
+                                 rendered="#{containerEditController.managed}" />
+                <h:commandButton value="#{msg.next}" action="#{containerEditController.submitPage1}" 
+                                 class="uk-button uk-width-1-1" 
+                                 style="margin-top: 20px;" />
+
+            </h:form>
+
+            <h:form id="actionFrom" class="actionForm">
+
+                <h:commandButton value="#{msg.delete}" 
+                                 action="#{containerEditController.delete}" 
+                                 class="uk-button uk-button-danger"
+                                 rendered="#{containerEditController.managed}" />
+
+                <h:commandButton value="#{msg.cancel}" action="#{containerEditController.cancel}" immediate="true" class="uk-button" style="float: right;" />
+
+            </h:form>
+
+        </div>
+
+    </ui:define>
+
+</ui:composition>

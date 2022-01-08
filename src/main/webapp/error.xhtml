@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+        <h:outputStylesheet name="css/reset.css"/>
+        <h:outputStylesheet name="css/style.css"/>
+        <h:outputStylesheet name="css/view.css"/>
+        <h:outputStylesheet name="css/primefaces-galaxy.css"/>
+        <h:outputStylesheet name="css/module.css"/>
+
+        <link rel="Galaxy icon" type="image/x-icon" href="/resources/img/favicon.ico"/>
+
+    </h:head>
+
+    <h:body>
+
+        <div class="wrapper"> 
+
+            <div class="header">
+                <div class="uk-container uk-container-center">
+                    <h:link value="" outcome="home">
+                        <div style="text-align: left; margin-top: 15px;">
+                            <h:graphicImage value="/resources/img/headerLogo.png" />
+                        </div>
+                    </h:link>
+                </div>
+            </div>
+
+            <div class="content">
+
+                <div class="content-container-error">
+
+                    <p><h:outputText value="#{msg.error}" class="uk-h1"/></p>
+                    <p><h:outputText value="#{flash.errorType}" class="uk-h2" /></p>
+                    <p><h:outputText value="#{flash.errorMsg}" /></p>
+                    <p><p:messages id="messages" showDetail="true" autoUpdate="true" closable="false" /></p>
+
+                </div>
+
+            </div>
+
+            <div class="footer">
+                <ui:include src="/templates/footer.xhtml" />
+            </div>
+
+        </div>
+
+        <ui:debug hotkey="q"/>
+
+    </h:body>
+
+</html>
